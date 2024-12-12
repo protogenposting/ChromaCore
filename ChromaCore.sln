@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35312.102
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChromaCore", "ChromaCore.csproj", "{96E51A7E-0103-469B-B64D-FD60796AE850}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{96E51A7E-0103-469B-B64D-FD60796AE850}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96E51A7E-0103-469B-B64D-FD60796AE850}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96E51A7E-0103-469B-B64D-FD60796AE850}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96E51A7E-0103-469B-B64D-FD60796AE850}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AF41D95E-289F-4F19-BCE8-D253C48BD7AF}
+	EndGlobalSection
+EndGlobal
