@@ -47,6 +47,14 @@ namespace ChromaCore.Code.Utils.Network
             lastPing = DateTime.Now;
         }
 
+        public void Disconnect()
+        {
+            SendMessage("disconnect", new JsonObject());
+            Thread.Sleep(100);
+            client.Close();
+            onDisconnect?.Invoke();
+        }
+
         public void SendMessage(string type, JsonObject message)
         {
             if (client == null || !client.Connected) return;
@@ -90,8 +98,6 @@ namespace ChromaCore.Code.Utils.Network
                 }
                 else if (type == "disconnect")
                 {
-                    SendMessage("disconnect", new JsonObject());
-                    client.GetStream().Close(50);
                     client.Close();
                     onDisconnect?.Invoke();
                     return new List<JsonDocument>();

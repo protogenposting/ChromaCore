@@ -19,6 +19,8 @@
         private ButtonMatrix holdMatrix;
         private MenuCursor holdCursor;
 
+        public bool mouseTriggered = false;
+
         KeyboardState prevKeyState = Keyboard.GetState();
 
         public List<Keys> availableKeys = new List<Keys>();
@@ -99,6 +101,7 @@
 
         void OpenText(MenuCursor cursor, ButtonMatrix matrix)
         {
+            mouseTriggered = cursor == null;
             if (cursor == null) cursor = Game.Instance.Scene.cursors[0];
             active = true;
             holdMatrix = matrix;

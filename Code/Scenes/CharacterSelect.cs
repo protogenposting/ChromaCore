@@ -247,7 +247,7 @@ namespace ChromaCore.Code.Scenes
             Game.Instance.ChangeScene(new MainMenu());
             if (netConnection != null)
             {
-                netConnection.SendMessage("disconnect", new JsonObject());
+                netConnection.Disconnect();
             }
         }
 

@@ -29,7 +29,7 @@ namespace ChromaCore.Code.Scenes
                 {
                     onClick = (c, m) =>
                     {
-                        Game.Instance.ChangeScene(new ConnectionScreen());
+                        Game.Instance.ChangeScene(new ConnectionScreen() {player1Controller = c == null ? -1 : c.input.id});
                     },
                     size = new Vector2(240, 80),
                     drawScale = 1.5f
@@ -38,7 +38,7 @@ namespace ChromaCore.Code.Scenes
                 {
                     onEnter = t =>
                     {
-                        Game.Instance.ChangeScene(new ConnectionScreen(t.entryText, 9000));
+                        Game.Instance.ChangeScene(new ConnectionScreen(t.entryText, 9000){player1Controller = t.mouseTriggered ? -1 : cursors[0].input.id});
                     },
                     size = new Vector2(240, 80),
                     drawScale = 1.5f
