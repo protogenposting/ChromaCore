@@ -91,6 +91,7 @@ namespace ChromaCore.Code.Utils.Network
                 else if (type == "disconnect")
                 {
                     SendMessage("disconnect", new JsonObject());
+                    client.GetStream().Close(50);
                     client.Close();
                     onDisconnect?.Invoke();
                     return new List<JsonDocument>();

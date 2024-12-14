@@ -217,6 +217,8 @@ namespace ChromaCore.Code.Objects
 
             ID = playerID;
             input = new Controller(controllerPort);
+            input.UpdateKeys(1);
+            input.ClearAllBuffers();
             position = scene.room.spawn[ID % 2];
             CollisionCorrection();
             if (attacks.Count != 0) attack = attacks[0];

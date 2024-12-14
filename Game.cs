@@ -85,6 +85,8 @@ namespace ChromaCore
             scene.Load();
 
             base.Initialize();
+            DataManager.SetupFileStructure();
+            DataManager.SetLastUsedProfiles(0, 0);
         }
 
         protected override void LoadContent()
