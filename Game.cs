@@ -74,9 +74,9 @@ namespace ChromaCore
         protected override void Initialize()
         {
             mainRender = new RenderTarget2D(GraphicsDevice, 1920, 1080);
-            graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width / 2;
-            graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height / 2;
-            Window.IsBorderless = false;
+            graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
+            graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+            Window.IsBorderless = true;
             graphics.ApplyChanges();
             GraphicsDevice.SamplerStates[1] = SamplerState.LinearClamp;
 
