@@ -28,13 +28,13 @@ namespace ChromaCore.Code.Utils.Collision
         {
             this.owner = owner;
             this.directionalOffset = directionalOffset;
-            this.size = new Vector2(width, height);
-            this.positionOffset = originOffset;
+            size = new Vector2(width, height);
+            positionOffset = originOffset;
         }
 
         public void Resize(float width, float height, Vector2 originOffset, float directionalOffset = 0)
         {
-            this.size = new Vector2(width, height);
+            size = new Vector2(width, height);
             positionOffset = originOffset;
         }
 
@@ -72,8 +72,8 @@ namespace ChromaCore.Code.Utils.Collision
 
         public bool Intersects(RectangleF r2)
         {
-            var collideX = (Left >= r2.Left && Left <= r2.Right) || (Right >= r2.Left && Right <= r2.Right) || (r2.Left >= Left && r2.Left <= Right) || (r2.Right >= Left && r2.Right <= Right);
-            var collideY = (Top >= r2.Top && Top <= r2.Bottom) || (Bottom >= r2.Top && Bottom <= r2.Bottom) || (r2.Top >= Top && r2.Top <= Bottom) || (r2.Bottom >= Top && r2.Bottom <= Bottom);
+            var collideX = Left >= r2.Left && Left <= r2.Right || Right >= r2.Left && Right <= r2.Right || r2.Left >= Left && r2.Left <= Right || r2.Right >= Left && r2.Right <= Right;
+            var collideY = Top >= r2.Top && Top <= r2.Bottom || Bottom >= r2.Top && Bottom <= r2.Bottom || r2.Top >= Top && r2.Top <= Bottom || r2.Bottom >= Top && r2.Bottom <= Bottom;
             return collideX && collideY;
         }
     }

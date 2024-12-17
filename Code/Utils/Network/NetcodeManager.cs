@@ -31,7 +31,7 @@ namespace ChromaCore.Code.Utils.Network
         public NetcodeManager(InGame scene, NetConnection connection)
         {
             this.scene = scene;
-            this.connections = new List<NetConnection>() { connection };
+            connections = new List<NetConnection>() { connection };
             myPlayerID = connection.playerID;
             frameCounters = new int[connections.Count + 1];
         }
@@ -121,7 +121,7 @@ namespace ChromaCore.Code.Utils.Network
                     else foreach (var player in players) player.input.ClearAllInputs();
                     scene.AdvanceFrame();
 
-                    if (i == frameCounters.Min() || (rollbackFrame < frameCounters.Min() && i == frameCounters[myPlayerID]))
+                    if (i == frameCounters.Min() || rollbackFrame < frameCounters.Min() && i == frameCounters[myPlayerID])
                     {
                         rollbackState = new GameState(scene);
                         rollbackFrame = i;

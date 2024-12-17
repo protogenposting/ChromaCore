@@ -50,7 +50,7 @@ namespace ChromaCore.Code.Scenes
             characterIcons = new ButtonMatrix(charIcons, ReturnToMainMenu, true) { cursorOffset = new Vector2(-64, 0), multiCursorOffset = new Vector2(0, 32) };
 
             readyButton = new ButtonMatrix(new UIElement[1, 1], DeselectCharacter, false) { cursorOffset = new Vector2(-64, 0), multiCursorOffset = new Vector2(0, 32) };
-            readyButton.buttons[0, 0] = new TextBlock("Ready", "ExampleContent/UIFont", Color.White, "UI/Menu/MenuButton", 960, 800) { onClick = (c, m) =>
+            readyButton.buttons[0, 0] = new TextBlock("Ready", "ExampleContent/UIFont", Color.White, "UI/Menu/MenuButton", 960, 800) { onClick = (c, m, b) =>
             {
                 if (netConnection != null)
                 {
@@ -75,36 +75,35 @@ namespace ChromaCore.Code.Scenes
                 }
             } };
 
+            characterIcons.upInput = (c, m) =>
+            {
+                Vector2 pos = c.position;
+                ButtonMatrix.DefaultUpPressed(c, m);
+                if (c.position != pos) palettes[cursors.IndexOf(c)] = 0;
+            };
+            characterIcons.downInput = (c, m) =>
+            {
+                Vector2 pos = c.position;
+                ButtonMatrix.DefaultDownPressed(c, m);
+                if (c.position != pos) palettes[cursors.IndexOf(c)] = 0;
+            };
+            characterIcons.leftInput = (c, m) =>
+            {
+                Vector2 pos = c.position;
+                ButtonMatrix.DefaultLeftPressed(c, m);
+                if (c.position != pos) palettes[cursors.IndexOf(c)] = 0;
+            };
+            characterIcons.rightInput = (c, m) =>
+            {
+                Vector2 pos = c.position;
+                ButtonMatrix.DefaultRightPressed(c, m);
+                if (c.position != pos) palettes[cursors.IndexOf(c)] = 0;
+            };
+
             foreach (int i in controllers)
             {
                 if (i == -2) cursors.Add(null);
-                else cursors.Add(new MenuCursor(i, characterIcons)
-                {
-                    UpInput = (c, m) =>
-                    {
-                        Vector2 pos = c.position;
-                        MenuCursor.DefaultUpPressed(c, m);
-                        if (c.position != pos) palettes[cursors.IndexOf(c)] = 0;
-                    },
-                    DownInput = (c, m) =>
-                    {
-                        Vector2 pos = c.position;
-                        MenuCursor.DefaultDownPressed(c, m);
-                        if (c.position != pos) palettes[cursors.IndexOf(c)] = 0;
-                    },
-                    LeftInput = (c, m) =>
-                    {
-                        Vector2 pos = c.position;
-                        MenuCursor.DefaultLeftPressed(c, m);
-                        if (c.position != pos) palettes[cursors.IndexOf(c)] = 0;
-                    },
-                    RightInput = (c, m) =>
-                    {
-                        Vector2 pos = c.position;
-                        MenuCursor.DefaultRightPressed(c, m);
-                        if (c.position != pos) palettes[cursors.IndexOf(c)] = 0;
-                    }
-                });
+                else cursors.Add(new MenuCursor(i, characterIcons));
             }
 
             UI.buttonMatricies.Add(characterIcons);
@@ -124,7 +123,7 @@ namespace ChromaCore.Code.Scenes
             else if (controllers[1] == -1) profileText[1].text = profileText[1].text + " | Tab";
             else UI.elements.Remove(profileText[1]);
 
-            int[] loadedProfiles = DataManager.LoadLastUsedProfiles();
+            int[] loadedProfiles = DataManager.GetLastUsedProfiles();
             if (loadedProfiles != null)
             {
                 playerProfiles[0] = DataManager.controllerProfiles[loadedProfiles[0]];
@@ -251,7 +250,7 @@ namespace ChromaCore.Code.Scenes
             }
         }
 
-        void SelectCharacter(MenuCursor cursor, ButtonMatrix matrix)
+        void SelectCharacter(MenuCursor cursor, ButtonMatrix matrix, UIElement button)
         {
             selectedCharacters[cursors.IndexOf(cursor)] = ((CSSIcon)characterIcons.buttons[(int)cursor.position.X, (int)cursor.position.Y]).character;
             cursor.SwitchMatrix(readyButton);
@@ -293,7 +292,7 @@ namespace ChromaCore.Code.Scenes
             c.SwitchMatrix(profileSelect);
         }
 
-        void SelectProfile(MenuCursor cursor, ButtonMatrix matrix)
+        void SelectProfile(MenuCursor cursor, ButtonMatrix matrix, UIElement button)
         {
             playerProfiles[cursors.IndexOf(cursor)] = DataManager.controllerProfiles[(int)cursor.position.Y];
             profileText[cursors.IndexOf(cursor)].text = "Profile: " + playerProfiles[cursors.IndexOf(cursor)].name;

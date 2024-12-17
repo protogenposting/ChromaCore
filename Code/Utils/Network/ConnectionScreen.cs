@@ -20,12 +20,12 @@ namespace ChromaCore.Code.Utils.Network
 
         public ConnectionScreen()
         {
-            this.host = true;
+            host = true;
         }
 
         public ConnectionScreen(string ip, int port)
         {
-            this.host = false;
+            host = false;
             this.ip = ip;
             this.port = port;
             DataManager.soundEffectVolume = 0;
@@ -40,7 +40,7 @@ namespace ChromaCore.Code.Utils.Network
             {
                 connection = host ? new NetConnection() { playerID = 0, playerController = player1Controller, onDisconnect = () => Game.Instance.ChangeScene(new MainMenu()) } : new NetConnection(ip, port) { playerID = 1, playerController = player1Controller, onDisconnect = () => Game.Instance.ChangeScene(new MainMenu()) };
                 connection.SendMessage("ConfirmConnection", new JsonObject());
-                
+
                 while (true)
                 {
                     bool exit = false;

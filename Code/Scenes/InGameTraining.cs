@@ -7,8 +7,8 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Audio;
 using System.Linq;
 using ChromaCore.Code.Objects;
-using ChromaCore.Code.Utils.Network;
 using ChromaCore.Code.Objects.Players.Characters;
+using ChromaCore.Code.Utils.Network;
 
 namespace ChromaCore.Code.Scenes
 {
@@ -63,6 +63,7 @@ namespace ChromaCore.Code.Scenes
                 }
                 else
                 {
+                    foreach (Fighter p in players) p.UpdateHurtboxes();
                     if (hitpause > 0) hitpause--;
                 }
             }
@@ -155,7 +156,7 @@ namespace ChromaCore.Code.Scenes
             return list;
         }
 
-        public void OpenTrainingSettingsMenu(MenuCursor c, ButtonMatrix m)
+        public void OpenTrainingSettingsMenu(MenuCursor c, ButtonMatrix m, UIElement button)
         {
             UI.buttonMatricies.Remove(pauseMenuUI);
 
@@ -165,21 +166,21 @@ namespace ChromaCore.Code.Scenes
             List<UIElement> buttons = new List<UIElement>();
             buttons.Add(new TextBlock("Hitboxes: " + (displayHitboxes ? "On" : "Off"), "ExampleContent/UIFont", Color.White, "UI/Menu/MenuButton")
             {
-                onClick = (c, m) =>
+                onClick = (c, m, b) =>
                 {
                     displayHitboxes = !displayHitboxes;
-                    ((TextBlock)m.buttons[0, 0]).text = "Hitboxes: " + (displayHitboxes ? "On" : "Off");
+                    ((TextBlock)b).text = "Hitboxes: " + (displayHitboxes ? "On" : "Off");
                 },
                 layer = 0.7f
             });
             buttons.Add(new TextBlock("Counter Hit: " + forceCounterHit.ToString(), "ExampleContent/UIFont", Color.White, "UI/Menu/MenuButton")
             {
-                onClick = (c, m) =>
+                onClick = (c, m, b) =>
                 {
                     forceCounterHit++;
                     if (forceCounterHit == CounterHitSetting.Length) forceCounterHit = CounterHitSetting.Off;
 
-                    ((TextBlock)m.buttons[0, 1]).text = "Counter Hit: " + forceCounterHit.ToString();
+                    ((TextBlock)b).text = "Counter Hit: " + forceCounterHit.ToString();
                 },
                 layer = 0.7f
             });
@@ -188,24 +189,24 @@ namespace ChromaCore.Code.Scenes
             {
                 buttons.Add(new TextBlock("Dummy: " + dummyController.action.ToString(), "ExampleContent/UIFont", Color.White, "UI/Menu/MenuButton")
                 {
-                    onClick = (c, m) =>
+                    onClick = (c, m, b) =>
                     {
                         dummyController.action++;
                         if (dummyController.action == TrainingDummyActions.EnumLength) dummyController.action = 0;
 
-                        ((TextBlock)m.buttons[0, 3]).text = "Dummy: " + dummyController.action.ToString();
+                        ((TextBlock)b).text = "Dummy: " + dummyController.action.ToString();
                     },
                     layer = 0.7f
                 });
 
                 buttons.Add(new TextBlock("Dummy Block: " + dummyController.blockMode.ToString(), "ExampleContent/UIFont", Color.White, "UI/Menu/MenuButton")
                 {
-                    onClick = (c, m) =>
+                    onClick = (c, m, b) =>
                     {
                         dummyController.blockMode++;
                         if (dummyController.blockMode == TrainingDummyBlockTypes.EnumLength) dummyController.blockMode = 0;
 
-                        ((TextBlock)m.buttons[0, 4]).text = "Dummy Block: " + dummyController.blockMode.ToString();
+                        ((TextBlock)b).text = "Dummy Block: " + dummyController.blockMode.ToString();
                     },
                     layer = 0.7f
                 });
@@ -215,12 +216,11 @@ namespace ChromaCore.Code.Scenes
             {
                 buttons.Add(new TextBlock("Heat: " + Jet.heatSettings[characterSettings["JetHeatSetting"]], "ExampleContent/UIFont", Color.White, "UI/Menu/MenuButton")
                 {
-                    onClick = (c, m) =>
+                    onClick = (c, m, b) =>
                     {
                         characterSettings["JetHeatSetting"]++;
                         if (characterSettings["JetHeatSetting"] >= Jet.heatSettings.Count) characterSettings["JetHeatSetting"] = 0;
-                        (int x, int y) pos = m.buttons.IndexWhere(b => b is TextBlock t && t.text.StartsWith("Heat"));
-                        if (pos != (-1, -1)) ((TextBlock)m.buttons[pos.x, pos.y]).text = "Heat: " + Jet.heatSettings[characterSettings["JetHeatSetting"]];
+                        ((TextBlock)b).text = "Heat: " + Jet.heatSettings[characterSettings["JetHeatSetting"]];
                     },
                     layer = 0.7f
                 });
@@ -262,7 +262,7 @@ namespace ChromaCore.Code.Scenes
             }
         }
 
-        protected override void ReturnToCSS(MenuCursor c, ButtonMatrix m)
+        protected override void ReturnToCSS(MenuCursor c, ButtonMatrix m, UIElement button)
         {
             Game.Instance.ChangeScene(new CharacterSelect([players[0].input.id, players[1].input.id]) { gamemode = Gamemodes.Training });
         }

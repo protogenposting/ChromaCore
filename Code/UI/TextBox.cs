@@ -13,8 +13,7 @@
         /// <summary>
         /// Runs when the user presses ENTER while active
         /// </summary>
-        public delegate void OnEnterText(TextBox textbox);
-        public OnEnterText onEnter;
+        public Action<TextBox> onEnter;
 
         private ButtonMatrix holdMatrix;
         private MenuCursor holdCursor;
@@ -82,13 +81,29 @@
                     active = false;
                     if (onEnter != null) onEnter(this);
                     holdCursor.matrix = holdMatrix;
+                    holdCursor.inputLockout = 10;
                 }
-                if (holdCursor != null && holdCursor.input.id != -1 && holdCursor.input.KeyPressed(Controller.Key_MenuConfirm) || holdCursor.input.KeyPressed(Controller.Key_MenuBack))
+                if (Keyboard.GetState().IsKeyDown(Keys.Escape) && !prevKeyState.IsKeyDown(Keys.Escape))
+                {
+                    active = false;
+                    holdCursor.matrix = holdMatrix;
+                    holdCursor.SwitchMatrix(holdMatrix, 0, 1);
+                    holdCursor.inputLockout = 10;
+                }
+                if (holdCursor != null && holdCursor.input.id != -1 && holdCursor.input.KeyPressed(Controller.Key_MenuConfirm))
                 {
                     holdCursor.input.ClearAllBuffers();
                     active = false;
                     if (onEnter != null) onEnter(this);
                     holdCursor.matrix = holdMatrix;
+                    holdCursor.inputLockout = 10;
+                }
+                if (holdCursor != null && holdCursor.input.id != -1 && holdCursor.input.KeyPressed(Controller.Key_MenuBack))
+                {
+                    holdCursor.input.ClearAllBuffers();
+                    active = false;
+                    holdCursor.SwitchMatrix(holdMatrix, 0, 1);
+                    holdCursor.inputLockout = 10;
                 }
 
                 prevKeyState = Keyboard.GetState();
@@ -99,10 +114,11 @@
             if ((flashingBarTimer / 30) % 2 == 1) text = ' ' + text + '|';
         }
 
-        void OpenText(MenuCursor cursor, ButtonMatrix matrix)
+        void OpenText(MenuCursor cursor, ButtonMatrix matrix, UIElement button)
         {
             mouseTriggered = cursor == null;
             if (cursor == null) cursor = Game.Instance.Scene.cursors[0];
+            if (matrix == null) matrix = cursor.matrix;
             active = true;
             holdMatrix = matrix;
             holdCursor = cursor;

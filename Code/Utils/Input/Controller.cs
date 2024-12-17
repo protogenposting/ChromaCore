@@ -310,7 +310,7 @@ namespace ChromaCore.Code.Utils.Input
 
                 List<Buttons> bindOverride = new List<Buttons>() { Buttons.LeftThumbstickUp, Buttons.LeftThumbstickDown, Buttons.LeftThumbstickLeft, Buttons.LeftThumbstickRight, Buttons.RightThumbstickUp, Buttons.RightThumbstickDown, Buttons.RightThumbstickLeft, Buttons.RightThumbstickRight };
 
-                if (id != KeyboardPort &&  GamePad.GetState(id).IsConnected)
+                if (id != KeyboardPort && GamePad.GetState(id).IsConnected)
                 {
                     if (!bindOverride.Contains(CorrectedButton(padBind[i])))
                     {
@@ -540,7 +540,7 @@ namespace ChromaCore.Code.Utils.Input
 
         public bool KeyDown(int key)
         {
-            return (keyDown[key] && keyPressed[key] <= Inputbuffer) || keyReleased[key] > Inputbuffer;
+            return keyDown[key] && keyPressed[key] <= Inputbuffer || keyReleased[key] > Inputbuffer;
         }
 
         public bool KeyReleased(int key)
@@ -689,16 +689,16 @@ namespace ChromaCore.Code.Utils.Input
 
         public InputState(int gamePadID)
         {
-            this.keyState = Keyboard.GetState();
-            this.padState = GamePad.GetState(gamePadID);
-            this.mouseState = Mouse.GetState();
+            keyState = Keyboard.GetState();
+            padState = GamePad.GetState(gamePadID);
+            mouseState = Mouse.GetState();
         }
 
         public InputState(InputState other)
         {
-            this.keyState = other.keyState;
-            this.padState = other.padState;
-            this.mouseState = other.mouseState;
+            keyState = other.keyState;
+            padState = other.padState;
+            mouseState = other.mouseState;
         }
 
         public InputState(KeyboardState keyState, GamePadState padState, MouseState mouseState)
@@ -740,27 +740,16 @@ namespace ChromaCore.Code.Utils.Input
         {
             ControlProfile c = new ControlProfile();
             c.name = name;
-            int pos = 3;
 
-            //Key Bindings
-            int i = 0;
-            while (pos < data.Length && i < c.keyBinds.Length && data[pos] != '|')
+            for (int i = 0; i < c.keyBinds.Length; i++)
             {
-                c.keyBinds[i] = (Keys)data[pos];
-                pos++;
-                i++;
+                c.keyBinds[i] = (Keys)data[i];
             }
-            if (pos < data.Length && data[pos] == '|') pos++;
-            else return c;
 
-            //Pad Bindings
-            i = 0;
-            while (pos < data.Length && i < c.padBinds.Length && data[pos] != '}')
+            for (int i = 0; i < c.padBinds.Length; i++)
             {
-                int num = BitConverter.ToInt32(data, pos);
-                c.padBinds[i] = (Buttons)num;
-                pos += 4;
-                i++;
+                c.padBinds[i] = (Buttons)Math.Round(MathF.Pow(2, data[i + c.keyBinds.Length]));
+                Debug.WriteLine(Math.Round(MathF.Pow(2, data[i])));
             }
 
             return c;
@@ -769,18 +758,10 @@ namespace ChromaCore.Code.Utils.Input
         public byte[] ToBytes()
         {
             List<byte> bytes = new List<byte>();
-            bytes.Add(0);
-            bytes.Add(0);
-            bytes.Add((byte)'|');
-
             foreach (Keys k in keyBinds) bytes.Add((byte)k);
-            bytes.Add((byte)'|');
             foreach (Buttons b in padBinds)
             {
-                bytes.Add(BitConverter.GetBytes((int)b)[0]);
-                bytes.Add(BitConverter.GetBytes((int)b)[1]);
-                bytes.Add(BitConverter.GetBytes((int)b)[2]);
-                bytes.Add(BitConverter.GetBytes((int)b)[3]);
+                bytes.Add((byte)MathF.Round(MathF.Log((int)b, 2)));
             }
 
             return bytes.ToArray();

@@ -183,7 +183,6 @@
         private readonly SoundEffect[] soundFiles;
         private SoundEffectInstance[] soundInstances;
         private bool[] active;
-        private float[] volumes;
 
         public LayeredMusicTrack(double trackDuration, params string[] files) : base(files[0], trackDuration)
         {

@@ -1,6 +1,4 @@
-﻿using ChromaCore.Code.Utils.Visual;
-
-namespace ChromaCore.Code.Scenes
+﻿namespace ChromaCore.Code.Scenes
 {
     /// <summary>
     /// <para>Basic container to handle game rules and logic</para>

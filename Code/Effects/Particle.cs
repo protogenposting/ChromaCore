@@ -1,5 +1,4 @@
 ﻿using ChromaCore.Code.Objects;
-using ChromaCore.Code.Utils.Visual;
 
 namespace ChromaCore.Code.Effects
 {

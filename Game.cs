@@ -80,12 +80,13 @@ namespace ChromaCore
             graphics.ApplyChanges();
             GraphicsDevice.SamplerStates[1] = SamplerState.LinearClamp;
 
+            DataManager.SetupFileStructure();
             DataManager.LoadControlProfiles();
+            DataManager.LoadSettings();
             scene = new MainMenu();
             scene.Load();
 
             base.Initialize();
-            DataManager.SetupFileStructure();
         }
 
         protected override void LoadContent()

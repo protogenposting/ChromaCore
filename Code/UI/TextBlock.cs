@@ -1,6 +1,4 @@
-﻿using ChromaCore.Code.Utils.Visual;
-
-namespace ChromaCore.Code.UI
+﻿namespace ChromaCore.Code.UI
 {
     /// <summary>
     /// UI element that displays text on top

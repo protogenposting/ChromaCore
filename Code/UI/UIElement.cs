@@ -1,6 +1,4 @@
-﻿using ChromaCore.Code.Utils.Visual;
-
-namespace ChromaCore.Code.UI
+﻿namespace ChromaCore.Code.UI
 {
     /// <summary>
     /// Base class for implementing UI with a built in onClick function
@@ -15,23 +13,24 @@ namespace ChromaCore.Code.UI
         public float layer = 0.5f;
         public float drawScale = 1;
         public float hoverScale = 1;
-        public delegate void OnClickEvent(MenuCursor cursor, ButtonMatrix matrix);
-        public OnClickEvent onClick;
+        public Action<MenuCursor, ButtonMatrix, UIElement> onClick;
         public Vector2 size;
 
         public UIElement parent = null;
         public List<UIElement> children = new List<UIElement>();
+        public ButtonMatrix parentMatrix;
+        public int matrixID = -1;
 
         protected bool MouseHovering => new Rectangle((int)position.X - (int)size.X / 2, (int)position.Y - (int)size.Y / 2, (int)size.X, (int)size.Y).Contains(Game.Instance.mouseScreenPosition);
 
-        public UIElement(string texture, float x = 0, float y = 0, OnClickEvent onClickEvent = null)
+        public UIElement(string texture, float x = 0, float y = 0, Action<MenuCursor, ButtonMatrix, UIElement> onClickEvent = null)
         {
             if (texture != "" && texture != null) animation = new Animation(texture);
             position = new Vector2(x, y);
             onClick = onClickEvent;
         }
 
-        public UIElement(Animation animation, float x = 0, float y = 0, OnClickEvent onClickEvent = null)
+        public UIElement(Animation animation, float x = 0, float y = 0, Action<MenuCursor, ButtonMatrix, UIElement> onClickEvent = null)
         {
             if (animation != null) this.animation = animation;
             position = new Vector2(x, y);
@@ -51,11 +50,11 @@ namespace ChromaCore.Code.UI
                     hoverScale = 1;
                     if (prevMouseClick)
                     {
-                        onClick?.Invoke(null, null);
+                        onClick?.Invoke(null, parentMatrix, this);
                         mouseClicked = false;
                     }
                 }
-                else hoverScale = MathHelper.Lerp(hoverScale, 1.15f, 0.25f);
+                else hoverScale = MathHelper.Lerp(hoverScale, 1.1f, 0.25f);
             }
             else
             {

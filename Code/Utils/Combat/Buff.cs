@@ -19,7 +19,7 @@ namespace ChromaCore.Code.Utils.Combat
         {
             identifier = id;
             duration = dur;
-            this.onTick = tick;
+            onTick = tick;
         }
 
         public static Buff Apply(Fighter target, string identifier, int duration, Action<Buff, Fighter> tickEffect = null, Action<SpriteBatch, Buff, Fighter> drawEffect = null)

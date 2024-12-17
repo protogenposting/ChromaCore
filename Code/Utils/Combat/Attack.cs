@@ -1,6 +1,5 @@
 ﻿using ChromaCore.Code.Effects;
 using ChromaCore.Code.Objects;
-using ChromaCore.Code.Utils.Visual;
 
 namespace ChromaCore.Code.Utils.Combat
 {

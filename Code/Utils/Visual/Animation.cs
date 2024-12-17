@@ -62,19 +62,19 @@ namespace ChromaCore.Code.Utils.Visual
 
         public Animation(string spriteSheetURL, int frameCount, int frameRate, bool loop = true)
         {
-            this.spriteSheet = Game.LoadAsset<Texture2D>(spriteSheetURL);
-            this.frames = frameCount;
+            spriteSheet = Game.LoadAsset<Texture2D>(spriteSheetURL);
+            frames = frameCount;
             this.frameRate = frameRate;
-            this.cellSize = new Vector2(this.spriteSheet.Width / frameCount, this.spriteSheet.Height);
+            cellSize = new Vector2(spriteSheet.Width / frameCount, spriteSheet.Height);
             loopAnim = loop;
         }
 
         public Animation(Texture2D spriteSheet, int frameCount, int frameRate, bool loop = true)
         {
             this.spriteSheet = spriteSheet;
-            this.frames = frameCount;
+            frames = frameCount;
             this.frameRate = frameRate;
-            this.cellSize = new Vector2(this.spriteSheet.Width / frameCount, this.spriteSheet.Height);
+            cellSize = new Vector2(this.spriteSheet.Width / frameCount, this.spriteSheet.Height);
             loopAnim = loop;
         }
 

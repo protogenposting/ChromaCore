@@ -1,4 +1,8 @@
-﻿namespace ChromaCore.Code.Utils
+﻿using System.Text;
+using System.Text.Json;
+using System.Text.Json.Nodes;
+
+namespace ChromaCore.Code.Utils
 {
     public static class DataManager
     {
@@ -8,6 +12,8 @@
 
         public static string rootDirectory;
         public static string saveDataDirectory;
+
+        public static int[] lastUsedProfiles = new int[2];
 
         public static List<ControlProfile> controllerProfiles = new List<ControlProfile>();
         public static Dictionary<string, int> keyBindNames = new Dictionary<string, int>()
@@ -32,95 +38,96 @@
 
         public static void LoadControlProfiles()
         {
-            Dictionary<string, IEnumerable<byte>> profiles = ReadAllSections("ControllerProfiles");
-            if (profiles.Count == 0) controllerProfiles.Add(new ControlProfile() { name = "Default" });
-            foreach (KeyValuePair<string, IEnumerable<byte>> p in profiles) controllerProfiles.Add(ControlProfile.LoadFromBytes(p.Value.ToArray(), p.Key.Substring(0, p.Key.Length - 1)));
+            if (!File.Exists(saveDataDirectory + "ControlProfiles"))
+            {
+                controllerProfiles = new List<ControlProfile>() { new ControlProfile() { name = "Default" } };
+                return;
+            }
+            try
+            {
+                controllerProfiles = new List<ControlProfile>();
+                JsonDocument json = JsonDocument.Parse(File.ReadAllText(saveDataDirectory + "ControlProfiles"));
+                foreach (JsonElement e in json.RootElement.EnumerateArray())
+                {
+                    var c = ControlProfile.LoadFromBytes(Encoding.ASCII.GetBytes(e.GetProperty("data").GetString()), e.GetProperty("name").GetString());
+                    controllerProfiles.Add(c);
+                }
+                if (controllerProfiles.Count == 0) controllerProfiles.Add(new ControlProfile() { name = "Default" });
+            }
+            catch
+            {
+                controllerProfiles = new List<ControlProfile>() { new ControlProfile() { name = "Default" } };
+                return;
+            }
         }
 
         public static void SaveControlProfiles()
         {
-            Dictionary<string, IEnumerable<byte>> profiles = new Dictionary<string, IEnumerable<byte>>();
-            foreach (ControlProfile c in controllerProfiles) profiles.Add(c.name + controllerProfiles.IndexOf(c), c.ToBytes());
-            WriteAllSections("ControllerProfiles", profiles);
-        }
-        public static int[] LoadLastUsedProfiles()
-        {
-            List<byte> bytes = ReadFileSection("Preferences", "LastUsedProfiles");
-            if (bytes == null) return new int[] { 0, 0 };
-            else return new int[] { bytes[0], bytes[1] };
-        }
-
-        public static void SetLastUsedProfiles(byte p1, byte p2) => WriteFileSection("Preferences", "LastUsedProfiles", new List<byte>() { p1, p2 });
-
-        public static void WriteFileSection(string fileName, string sectionTitle, IEnumerable<byte> data)
-        {
-            Dictionary<string, IEnumerable<byte>> sections = ReadAllSections(fileName);
-
-            if (sections.ContainsKey(sectionTitle)) sections[sectionTitle] = data;
-            else sections.Add(sectionTitle, data);
-
-            WriteAllSections(fileName, sections);
-        }
-
-        public static List<byte> ReadFileSection(string fileName, string sectionTitle)
-        {
-            Dictionary<string, IEnumerable<byte>> sections = ReadAllSections(fileName);
-
-            if (sections.ContainsKey(sectionTitle)) return sections[sectionTitle].ToList();
-            else return null;
-        }
-
-        public static void WriteAllSections(string fileName, Dictionary<string, IEnumerable<byte>> sections)
-        {
-            if (!File.Exists(rootDirectory + "/" + fileName)) File.Create(rootDirectory + "/" + fileName).Close();
-
-            FileStream fs = File.OpenWrite(rootDirectory + "/" + fileName);
-            fs.SetLength(0);
-            foreach (KeyValuePair<string, IEnumerable<byte>> section in sections)
+            try
             {
-                fs.Write(Encoding.ASCII.GetBytes("{" + section.Key + ":"));
-                fs.Write(section.Value.ToArray());
-                fs.WriteByte((byte)'}');
-            }
-            fs.Close();
-        }
-
-        public static Dictionary<string, IEnumerable<byte>> ReadAllSections(string fileName)
-        {
-            Dictionary<string, IEnumerable<byte>> sections = new Dictionary<string, IEnumerable<byte>>();
-            if (!File.Exists(rootDirectory + "/" + fileName)) return sections;
-
-            FileStream fs = File.OpenRead(rootDirectory + "/" + fileName);
-            byte[] data = new byte[fs.Length];
-            fs.Read(data);
-            fs.Close();
-
-            for (int i = 0; i < data.Length; i++)
-            {
-                if (data[i] == '{')
+                JsonArray json = new JsonArray();
+                foreach (ControlProfile c in controllerProfiles)
                 {
-                    i++;
-                    List<byte> name = new List<byte>();
-                    while (i < data.Length && data[i] != ':')
+                    json.Add(new JsonObject()
                     {
-                        name.Add(data[i]);
-                        i++;
-                    }
-                    i++;
-
-                    List<byte> bytes = new List<byte>();
-                    while (i < data.Length && data[i] != '}')
-                    {
-                        bytes.Add(data[i]);
-                        i++;
-                    }
-
-                    sections.Add(Encoding.ASCII.GetString(name.ToArray()), bytes);
+                        { "name", c.name },
+                        { "data", Encoding.ASCII.GetString(c.ToBytes()) }
+                    });
                 }
-                else break;
+                File.WriteAllText(saveDataDirectory + "ControlProfiles", json.ToString());
             }
+            catch
+            {
+                return;
+            }
+        }
+        public static int[] GetLastUsedProfiles()
+        {
+            return [lastUsedProfiles[0] < controllerProfiles.Count ? lastUsedProfiles[0] : 0, lastUsedProfiles[1] < controllerProfiles.Count ? lastUsedProfiles[1] : 0];
+        }
 
-            return sections;
+        public static void SetLastUsedProfiles(byte p1, byte p2)
+        {
+            lastUsedProfiles[0] = p1;
+            lastUsedProfiles[1] = p2;
+            SaveSettings();
+        }
+
+        public static void LoadSettings()
+        {
+            try
+            {
+                JsonDocument json = JsonDocument.Parse(File.ReadAllText(saveDataDirectory + "Settings"));
+
+                masterVolume = json.RootElement.GetProperty("MasterVolume").GetSingle();
+                musicVolume = json.RootElement.GetProperty("MusicVolume").GetSingle();
+                soundEffectVolume = json.RootElement.GetProperty("SoundVolume").GetSingle();
+                lastUsedProfiles[0] = json.RootElement.GetProperty("P1Profile").GetInt32();
+                lastUsedProfiles[1] = json.RootElement.GetProperty("P2Profile").GetInt32();
+            }
+            catch
+            {
+                return;
+            }
+        }
+        public static void SaveSettings()
+        {
+            try
+            {
+                JsonObject json = new JsonObject()
+                {
+                    { "MasterVolume", masterVolume },
+                    { "MusicVolume", musicVolume },
+                    { "SoundVolume", soundEffectVolume },
+                    { "P1Profile", lastUsedProfiles[0] },
+                    { "P2Profile", lastUsedProfiles[1] },
+                };
+                File.WriteAllText(saveDataDirectory + "Settings", json.ToString());
+            }
+            catch
+            {
+                return;
+            }
         }
     }
 }

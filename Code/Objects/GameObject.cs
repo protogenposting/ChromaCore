@@ -1,7 +1,5 @@
 ﻿using ChromaCore.Code.Effects;
 using ChromaCore.Code.Scenes;
-using ChromaCore.Code.Utils.Map;
-using ChromaCore.Code.Utils.Visual;
 using System;
 
 namespace ChromaCore.Code.Objects

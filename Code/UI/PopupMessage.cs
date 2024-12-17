@@ -1,6 +1,4 @@
-﻿using ChromaCore.Code.Utils.Visual;
-
-namespace ChromaCore.Code.UI
+﻿namespace ChromaCore.Code.UI
 {
     /// <summary>
     /// <para>Overrides the current UI to display in the center of the screen</para>
@@ -21,9 +19,9 @@ namespace ChromaCore.Code.UI
 
         public static string BoxTexture = "ExampleContent/UIPopupMessageBox";
 
-        OnClickEvent onCancel;
+        Action<MenuCursor, ButtonMatrix, UIElement> onCancel;
 
-        PopupMessage(string message, string font, MenuCursor cursor = null, OnClickEvent onConfirm = null, OnClickEvent onCancel = null) : base(message, font, Color.White, BoxTexture)
+        PopupMessage(string message, string font, MenuCursor cursor = null, Action<MenuCursor, ButtonMatrix, UIElement> onConfirm = null, Action<MenuCursor, ButtonMatrix, UIElement> onCancel = null) : base(message, font, Color.White, BoxTexture)
         {
             if (cursor != null) this.cursor = cursor;
             else
@@ -39,7 +37,7 @@ namespace ChromaCore.Code.UI
             position = new Vector2(960, 540);
         }
 
-        public static void Create(string message, string font, MenuCursor cursor = null, OnClickEvent onConfirm = null, OnClickEvent onCancel = null, string confirmText = "Confirm", string cancelText = "Cancel")
+        public static void Create(string message, string font, MenuCursor cursor = null, Action<MenuCursor, ButtonMatrix, UIElement> onConfirm = null, Action<MenuCursor, ButtonMatrix, UIElement> onCancel = null, string confirmText = "Confirm", string cancelText = "Cancel")
         {
             if (Game.Instance.Scene.UI.elements.Exists(e => e is PopupMessage)) return;
 
@@ -80,13 +78,13 @@ namespace ChromaCore.Code.UI
 
                 if (timer == -1)
                 {
-                    onClick?.Invoke(cursor, null);
+                    onClick?.Invoke(cursor, null, this);
                     Game.Instance.Scene.UI.elements.Remove(this);
                     Dispose();
                 }
                 if (timer == -21)
                 {
-                    onCancel.Invoke(cursor, null);
+                    onCancel.Invoke(cursor, null, this);
                     Game.Instance.Scene.UI.elements.Remove(this);
                     Dispose();
                 }

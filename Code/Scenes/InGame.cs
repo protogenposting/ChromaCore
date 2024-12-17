@@ -2,9 +2,7 @@
 using ChromaCore.Code.Objects;
 using ChromaCore.Code.Objects.Players.Characters;
 using ChromaCore.Code.Stages;
-using ChromaCore.Code.Utils.Input;
 using ChromaCore.Code.Utils.Network;
-using ChromaCore.Code.Utils.Visual;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace ChromaCore.Code.Scenes
@@ -427,7 +425,7 @@ namespace ChromaCore.Code.Scenes
             {
                 new TextBlock("Resume", "ExampleContent/UIFont", Color.White, "UI/Menu/MenuButton")
                 {
-                    onClick = Unpause,
+                    onClick = (c, m, b) => Unpause(c, m),
                     layer = 0.7f
                 },
                 new TextBlock("Character Select", "ExampleContent/UIFont", Color.White, "UI/Menu/MenuButton")
@@ -437,7 +435,7 @@ namespace ChromaCore.Code.Scenes
                 },
                 new TextBlock("Main Menu", "ExampleContent/UIFont", Color.White, "UI/Menu/MenuButton")
                 {
-                    onClick = (c, m) => Game.Instance.ChangeScene(new MainMenu()),
+                    onClick = (c, m, b) => Game.Instance.ChangeScene(new MainMenu()),
                     layer = 0.7f
                 }
             };
@@ -476,7 +474,7 @@ namespace ChromaCore.Code.Scenes
             }
         }
 
-        protected virtual void ReturnToCSS(MenuCursor c, ButtonMatrix m)
+        protected virtual void ReturnToCSS(MenuCursor c, ButtonMatrix m, UIElement button)
         {
             Game.Instance.ChangeScene(new CharacterSelect(new int[] { players[0].input.id, players[1].input.id }) { gamemode = Gamemodes.Versus });
         }

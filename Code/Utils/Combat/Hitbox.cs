@@ -1,7 +1,6 @@
 ﻿using ChromaCore.Code.Effects;
 using ChromaCore.Code.Objects;
 using ChromaCore.Code.Scenes;
-using ChromaCore.Code.Utils.Visual;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Reflection.Emit;
@@ -28,7 +27,7 @@ namespace ChromaCore.Code.Utils.Combat
         public int blockstun;
         public int blockPush;
         public int group;
-        public List<Fighter.HitstunProperties> hitstunProperties;
+        public List<HitstunProperties> hitstunProperties;
         public int knockdownDuration;
         public SoundEffect hitSound = null;
         public ParticleSpawner hitParticle;
@@ -43,7 +42,7 @@ namespace ChromaCore.Code.Utils.Combat
         public Action<Hitbox, Fighter> postHitEffect;
         public Action<Hitbox, Fighter> onBlockHitEffect;
 
-        public Hitbox(Fighter player, int damage, Knockback knockback, float comboScaling, Vector2 size, Vector2 positionOffset, int hitstun, int lifetime = 3, int hitpause = 4, HitTypes hitType = 0, int blockstun = 10, int blockPush = 4, string hitSfx = "Sounds/Hit", int hitboxGroup = -1, List<Fighter.HitstunProperties> hitstunProperties = null, Action<Hitbox, Fighter> hitEffect = null, bool active = true) : base()
+        public Hitbox(Fighter player, int damage, Knockback knockback, float comboScaling, Vector2 size, Vector2 positionOffset, int hitstun, int lifetime = 3, int hitpause = 4, HitTypes hitType = 0, int blockstun = 10, int blockPush = 4, string hitSfx = "Sounds/Hit", int hitboxGroup = -1, List<HitstunProperties> hitstunProperties = null, Action<Hitbox, Fighter> hitEffect = null, bool active = true) : base()
         {
             owner = player;
             dmg = damage;
@@ -59,7 +58,7 @@ namespace ChromaCore.Code.Utils.Combat
             this.blockPush = blockPush;
             group = hitboxGroup;
             this.hitstunProperties = hitstunProperties;
-            this.preHitEffect = hitEffect;
+            preHitEffect = hitEffect;
             if (hitSfx != "") hitSound = Game.LoadAsset<SoundEffect>(hitSfx);
             else hitSound = null;
             this.active = active;
@@ -67,7 +66,7 @@ namespace ChromaCore.Code.Utils.Combat
             parentAttack = owner.attack;
 
             position = owner.position + offset;
-            if (owner.direction == -1) position.X -= (offset.X * 2);
+            if (owner.direction == -1) position.X -= offset.X * 2;
 
             scene.hitboxes.Add(this);
 
@@ -78,7 +77,7 @@ namespace ChromaCore.Code.Utils.Combat
         {
             if (destroyed) return;
             position = owner.position + offset;
-            if (owner.direction == -1) position.X -= (offset.X * 2);
+            if (owner.direction == -1) position.X -= offset.X * 2;
 
             if (owner.state == States.Attack)
             {
@@ -114,7 +113,7 @@ namespace ChromaCore.Code.Utils.Combat
                 }
             }
 
-            if (owner.attack != parentAttack || owner.state != Fighter.States.Attack) allowCancel = false;
+            if (owner.attack != parentAttack || owner.state != States.Attack) allowCancel = false;
 
             timer++;
             if (timer > life) Destroy();
@@ -139,7 +138,7 @@ namespace ChromaCore.Code.Utils.Combat
             if (target.armorFrames <= 0 || hitType.ToString().Contains("Grab"))
             {
                 bool wasGrounded = target.Grounded;
-                target.velocity = CalculateKnockBack(kb, (!target.airCombo || (hitstunProperties.Contains(Fighter.HitstunProperties.Launcher) && !target.launched)) ? 1 : Math.Min(1, (13 - (target.comboScaling * kb.scaling)) / 10));
+                target.velocity = CalculateKnockBack(kb, !target.airCombo || hitstunProperties.Contains(HitstunProperties.Launcher) && !target.launched ? 1 : Math.Min(1, (13 - target.comboScaling * kb.scaling) / 10));
                 if (wasGrounded && !toAir)
                 {
                     target.velocity.Y = 0;
@@ -150,12 +149,12 @@ namespace ChromaCore.Code.Utils.Combat
                 }
                 target.hitstunProperties.Clear();
                 target.hitstunProperties.AddRange(hitstunProperties);
-                if (hitstunProperties.Contains(Fighter.HitstunProperties.Launcher))
+                if (hitstunProperties.Contains(HitstunProperties.Launcher))
                 {
                     if (target.launched)
                     {
                         target.velocity /= 2;
-                        target.hitstunProperties.Remove(Fighter.HitstunProperties.Launcher);
+                        target.hitstunProperties.Remove(HitstunProperties.Launcher);
                     }
                     else target.launched = true;
                 }
@@ -175,10 +174,10 @@ namespace ChromaCore.Code.Utils.Combat
             //Apply hitstun and combo counting
             if (target.armorFrames <= 0 || hitType.ToString().Contains("Grab"))
             {
-                target.hitstunTimer = Math.Min(stun + 4 - (int)(target.comboScaling), stun);
+                target.hitstunTimer = Math.Min(stun + 4 - (int)target.comboScaling, stun);
                 if (target.comboScaling < -1) target.hitstunTimer += 4;
                 if (target.hitstunTimer < 2) target.hitstunTimer = 2;
-                if (counterHitType == 1 || (target.comboScaling <= -8 && target.comboCounter <= 1))
+                if (counterHitType == 1 || target.comboScaling <= -8 && target.comboCounter <= 1)
                 {
                     target.hitstunTimer += 10;
                     if (target.velocity.Y < 0)
@@ -196,7 +195,7 @@ namespace ChromaCore.Code.Utils.Combat
                     if (groundHurtAnimation == GroundHurtAnimationSelection.Auto)
                     {
                         if (target.overheadHurtAnim != null && hitType == HitTypes.Overhead && kb.angle < 0) target.animation = target.overheadHurtAnim;
-                        else if (target.crouchHurtAnim != null && (target.state == States.Crouch || (target.state == States.Attack && target.attack.holdCrouch) || target.animation == target.crouchHurtAnim || target.animation == target.overheadHurtAnim))
+                        else if (target.crouchHurtAnim != null && (target.state == States.Crouch || target.state == States.Attack && target.attack.holdCrouch || target.animation == target.crouchHurtAnim || target.animation == target.overheadHurtAnim))
                             target.animation = target.crouchHurtAnim;
                         else target.animation = target.groundHurtAnim;
                     }
@@ -295,16 +294,16 @@ namespace ChromaCore.Code.Utils.Combat
         public int aiTimer;
         public bool transcendent = false;
 
-        public Projectile(Fighter player, int damage, Knockback knockback, float comboScaling, Vector2 size, Vector2 positionOffset, string sprite, Vector2 ejectVelocity, float gravity, float fallSpeed, int hitstun, int lifetime = 3, int hitpause = 4, HitTypes hitType = 0, int blockstun = 10, int blockPush = 4, string hitSfx = "Sounds/Hit", float scale = 1, Action<Projectile> updateAI = null, int hitboxGroup = -1, List<Fighter.HitstunProperties> hitstunProperties = null, Action<Hitbox, Fighter> hitEffect = null, bool spawnInBounds = true, bool active = true) : base(player, damage, knockback, comboScaling, size, positionOffset, hitstun, lifetime, hitpause, hitType, blockstun, blockPush, hitSfx, hitboxGroup, hitstunProperties, hitEffect, active)
+        public Projectile(Fighter player, int damage, Knockback knockback, float comboScaling, Vector2 size, Vector2 positionOffset, string sprite, Vector2 ejectVelocity, float gravity, float fallSpeed, int hitstun, int lifetime = 3, int hitpause = 4, HitTypes hitType = 0, int blockstun = 10, int blockPush = 4, string hitSfx = "Sounds/Hit", float scale = 1, Action<Projectile> updateAI = null, int hitboxGroup = -1, List<HitstunProperties> hitstunProperties = null, Action<Hitbox, Fighter> hitEffect = null, bool spawnInBounds = true, bool active = true) : base(player, damage, knockback, comboScaling, size, positionOffset, hitstun, lifetime, hitpause, hitType, blockstun, blockPush, hitSfx, hitboxGroup, hitstunProperties, hitEffect, active)
         {
-            if (sprite != "") this.animation = new Animation(sprite);
+            if (sprite != "") animation = new Animation(sprite);
             drawScale = scale;
             direction = player.direction;
             ejectVelocity.X *= direction;
             velocity = ejectVelocity;
             this.gravity = gravity;
             this.fallSpeed = fallSpeed;
-            this.projectileUpdate = updateAI;
+            projectileUpdate = updateAI;
             drawLayer = 0.65f;
 
             ignoreTiles = true;
@@ -326,7 +325,7 @@ namespace ChromaCore.Code.Utils.Combat
             }
         }
 
-        public Projectile(Fighter player, int damage, Knockback knockback, float comboScaling, Vector2 size, Vector2 positionOffset, Animation animation, Vector2 ejectVelocity, float gravity, float fallSpeed, int hitstun, int lifetime = 3, int hitpause = 4, HitTypes hitType = 0, int blockstun = 10, int blockPush = 4, string hitSfx = "Sounds/Hit", float scale = 1, Action<Projectile> updateAI = null, int hitboxGroup = -1, List<Fighter.HitstunProperties> hitstunProperties = null, Action<Hitbox, Fighter> hitEffect = null, bool spawnInBounds = true, bool active = true) : base(player, damage, knockback, comboScaling, size, positionOffset, hitstun, lifetime, hitpause, hitType, blockstun, blockPush, hitSfx, hitboxGroup, hitstunProperties, hitEffect, active)
+        public Projectile(Fighter player, int damage, Knockback knockback, float comboScaling, Vector2 size, Vector2 positionOffset, Animation animation, Vector2 ejectVelocity, float gravity, float fallSpeed, int hitstun, int lifetime = 3, int hitpause = 4, HitTypes hitType = 0, int blockstun = 10, int blockPush = 4, string hitSfx = "Sounds/Hit", float scale = 1, Action<Projectile> updateAI = null, int hitboxGroup = -1, List<HitstunProperties> hitstunProperties = null, Action<Hitbox, Fighter> hitEffect = null, bool spawnInBounds = true, bool active = true) : base(player, damage, knockback, comboScaling, size, positionOffset, hitstun, lifetime, hitpause, hitType, blockstun, blockPush, hitSfx, hitboxGroup, hitstunProperties, hitEffect, active)
         {
             this.animation = new Animation(animation.spriteSheet, animation.frames, animation.frameRate, animation.cellSize, animation.loopAnim);
             drawScale = scale;
@@ -335,7 +334,7 @@ namespace ChromaCore.Code.Utils.Combat
             velocity = ejectVelocity;
             this.gravity = gravity;
             this.fallSpeed = fallSpeed;
-            this.projectileUpdate = updateAI;
+            projectileUpdate = updateAI;
             drawLayer = 0.65f;
 
             ignoreTiles = true;
@@ -391,7 +390,7 @@ namespace ChromaCore.Code.Utils.Combat
                 }
             }
 
-            if (owner.attack != parentAttack || owner.state != Fighter.States.Attack) allowCancel = false;
+            if (owner.attack != parentAttack || owner.state != States.Attack) allowCancel = false;
 
             timer++;
             if (timer > life) Destroy();

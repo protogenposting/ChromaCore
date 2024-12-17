@@ -14,7 +14,7 @@ namespace ChromaCore.Code.Utils.ScreenTransitions
             target.Y = Math.Clamp(target.Y, 0, 1080);
 
             float interval = duration / 3f;
-            float ring = timer <= interval ? ((interval - timer) / interval) : timer >= interval * 2 ? ((interval - (duration - timer)) / interval) : 0;
+            float ring = timer <= interval ? (interval - timer) / interval : timer >= interval * 2 ? (interval - (duration - timer)) / interval : 0;
             ring *= 1800;
 
             effect.Parameters["target"].SetValue(target);

@@ -79,17 +79,17 @@ namespace ChromaCore.Code.Utils.Visual
 
                 try
                 {
-                    target.X = (int)Math.Clamp(target.X, scene.room.bounds.Left + (CamWidth / 2) + 4, scene.room.bounds.Right - (CamWidth / 2) - 4);
+                    target.X = (int)Math.Clamp(target.X, scene.room.bounds.Left + CamWidth / 2 + 4, scene.room.bounds.Right - CamWidth / 2 - 4);
                 }
                 catch
                 {
                     target.X = scene.room.bounds.Center.X;
                 }
                 target.Y = Math.Max(target.Y, scene.room.bounds.Top + CamHeight);
-                target.Y = Math.Min(target.Y, scene.room.bounds.Bottom - (CamHeight / 2));
+                target.Y = Math.Min(target.Y, scene.room.bounds.Bottom - CamHeight / 2);
 
-                if (instant) position = target - (new Vector2(CamWidth, CamHeight) / 2);
-                else position = Vector2.Lerp(position, target - (new Vector2(CamWidth, CamHeight) / 2), 0.6f);
+                if (instant) position = target - new Vector2(CamWidth, CamHeight) / 2;
+                else position = Vector2.Lerp(position, target - new Vector2(CamWidth, CamHeight) / 2, 0.6f);
 
                 if (shakeDuration > 0)
                 {

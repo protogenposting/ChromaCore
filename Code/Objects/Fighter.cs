@@ -763,7 +763,7 @@ namespace ChromaCore.Code.Objects
 
             if (knockdownTimer > 0 || blockStun > 0) grabProtection = 10;
 
-            OverrideHurtboxes();
+            UpdateHurtboxes();
 
             ResetStats();
 
@@ -1129,7 +1129,7 @@ namespace ChromaCore.Code.Objects
             }
         }
 
-        protected virtual void OverrideHurtboxes() { }
+        public virtual void UpdateHurtboxes() { }
 
         protected void AddHurtbox(int width, int height, int xOffset, int yOffset)
         {

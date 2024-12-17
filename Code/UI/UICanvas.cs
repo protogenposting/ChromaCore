@@ -5,6 +5,8 @@
     /// </summary>
     public class UICanvas : IDisposable
     {
+        public bool enabled = true;
+
         public List<UIElement> elements;
         public List<ButtonMatrix> buttonMatricies;
 
@@ -16,12 +18,14 @@
 
         public virtual void Update()
         {
+            if (!enabled) return;
             foreach (UIElement e in elements.ToArray()) e.Update();
             foreach (ButtonMatrix m in buttonMatricies.ToArray()) m.Update();
         }
 
         public virtual void Draw(SpriteBatch spritebatch)
         {
+            if (!enabled) return;
             foreach (UIElement e in elements.ToArray()) e.Draw(spritebatch);
             foreach (ButtonMatrix m in buttonMatricies.ToArray()) m.Draw(spritebatch);
         }

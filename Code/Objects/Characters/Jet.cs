@@ -1958,7 +1958,7 @@ namespace ChromaCore.Code.Objects.Players.Characters
             new AfterImage(this, 30, c[c.Length - 2], 0.9f);
         }
 
-        protected override void OverrideHurtboxes()
+        public override void UpdateHurtboxes()
         {
             if (state == States.Idle)
             {

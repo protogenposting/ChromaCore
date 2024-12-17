@@ -119,13 +119,13 @@ namespace ChromaCore.Code.Scenes
             if (winScreenTimer <= 0) base.Pause(controllerID);
         }
 
-        void Rematch(MenuCursor cursor, ButtonMatrix matrix)
+        void Rematch(MenuCursor cursor, ButtonMatrix matrix, UIElement button)
         {
             Game.Instance.ChangeScene(new InGameVersus(new Type[] { players[0].GetType(), players[1].GetType() }, new int[] { players[0].input.id, players[1].input.id }, controllerProfiles.ToArray(), new int[]
             {
                 players[0].currentPalette, players[1].currentPalette
             }, roomType));
         }
-        void QuitToMenu(MenuCursor cursor, ButtonMatrix matrix) => Game.Instance.ChangeScene(new MainMenu());
+        void QuitToMenu(MenuCursor cursor, ButtonMatrix matrix, UIElement button) => Game.Instance.ChangeScene(new MainMenu());
     }
 }
