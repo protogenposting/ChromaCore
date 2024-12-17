@@ -23,6 +23,13 @@
             { "Dash", Controller.Key_Dash },
         };
 
+        public static void SetupFileStructure()
+        {
+            if (!Directory.Exists(Directory.GetCurrentDirectory() + "/SaveData/")) Directory.CreateDirectory(Directory.GetCurrentDirectory() + "/SaveData/");
+            saveDataDirectory = Directory.GetCurrentDirectory() + "/SaveData/";
+            rootDirectory = Directory.GetCurrentDirectory() + "/";
+        }
+
         public static void LoadControlProfiles()
         {
             Dictionary<string, IEnumerable<byte>> profiles = ReadAllSections("ControllerProfiles");

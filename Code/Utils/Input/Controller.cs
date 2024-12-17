@@ -38,7 +38,7 @@ namespace ChromaCore.Code.Utils.Input
         {
             keyBind[Key_MenuConfirm] = Keys.Enter;
             keyBind[Key_MenuBack] = Keys.Escape;
-            keyBind[Key_Start] = Keys.Escape;
+            keyBind[Key_Start] = Keys.Enter;
             keyBind[Key_Select] = Keys.Tab;
             keyBind[Key_Up] = Keys.W;
             keyBind[Key_Down] = Keys.S;

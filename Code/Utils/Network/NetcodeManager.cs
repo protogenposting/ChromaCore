@@ -118,7 +118,7 @@ namespace ChromaCore.Code.Utils.Network
                             players[j].input.UpdateKeys(inputHistory[i - InputDelay][j], players[j].direction);
                         }
                     }
-                    else foreach (var player in players) player.input.ClearAllBuffers();
+                    else foreach (var player in players) player.input.ClearAllInputs();
                     scene.AdvanceFrame();
 
                     if (i == frameCounters.Min() || (rollbackFrame < frameCounters.Min() && i == frameCounters[myPlayerID]))
@@ -138,7 +138,7 @@ namespace ChromaCore.Code.Utils.Network
                     players[j].input.UpdateKeys(inputHistory[frameCounters[myPlayerID] - InputDelay][j], players[j].direction);
                 }
             }
-            else foreach (var player in players) player.input.ClearAllBuffers();
+            else foreach (var player in players) player.input.ClearAllInputs();
             scene.AdvanceFrame();
 
             frameCounters[myPlayerID]++;
@@ -178,11 +178,6 @@ namespace ChromaCore.Code.Utils.Network
                     frameCounters[id] = Math.Max(frame, frameCounters[id]);
                 }
             }
-        }
-
-        public void CloseConnection()
-        {
-            foreach (var con in connections) con.client.Close();
         }
     }
 

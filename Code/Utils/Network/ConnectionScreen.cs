@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using ChromaCore.Code.Objects.Players.Characters;
 using ChromaCore.Code.Scenes;
@@ -37,6 +39,25 @@ namespace ChromaCore.Code.Utils.Network
             Task.Run(() =>
             {
                 connection = host ? new NetConnection() { playerID = 0, playerController = player1Controller, onDisconnect = () => Game.Instance.ChangeScene(new MainMenu()) } : new NetConnection(ip, port) { playerID = 1, playerController = player1Controller, onDisconnect = () => Game.Instance.ChangeScene(new MainMenu()) };
+                connection.SendMessage("ConfirmConnection", new JsonObject());
+                
+                while (true)
+                {
+                    bool exit = false;
+                    var messages = connection.ReceiveMessages();
+                    foreach (var message in messages)
+                    {
+                        string type = message.RootElement.GetProperty("type").GetString();
+                        if (type == "ConfirmConnection")
+                        {
+                            if (message.RootElement.TryGetProperty("PID", out JsonElement val)) connection.playerID = val.GetInt32();
+                            exit = true;
+                            break;
+                        }
+                    }
+                    if (exit) break;
+                }
+
                 Game.Instance.ChangeScene(new CharacterSelect(connection, player1Controller));
             });
         }

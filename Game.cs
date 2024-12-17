@@ -85,6 +85,7 @@ namespace ChromaCore
             scene.Load();
 
             base.Initialize();
+            DataManager.SetupFileStructure();
         }
 
         protected override void LoadContent()

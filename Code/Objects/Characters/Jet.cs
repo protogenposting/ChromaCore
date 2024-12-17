@@ -384,7 +384,7 @@ namespace ChromaCore.Code.Objects.Players.Characters
             {
                 particles = new AnimationParticle[]
                 {
-                    new AnimationParticle(new Animation("Characters/Jet/att_Special_Particle", 7, 4, new Vector2(80), false), 4, 28) {stayWithOwner = false}
+                    new AnimationParticle(new Animation("Characters/Jet/att_Heavy_Particle", 7, 4, new Vector2(80), false), 4, 28) {stayWithOwner = false}
                 }
             }, new AttackInput(Controller.Key_Heavy))
             {
@@ -473,7 +473,7 @@ namespace ChromaCore.Code.Objects.Players.Characters
             {
                 particles = new AnimationParticle[]
                 {
-                    new AnimationParticle(new Animation("Characters/Jet/att_CrouchSpecial_Particle", 5, 4, new Vector2(64), false), 11, 20, 0, 0, 1, false)
+                    new AnimationParticle(new Animation("Characters/Jet/att_CrouchHeavy_Particle", 5, 4, new Vector2(64), false), 11, 20, 0, 0, 1, false)
                 }
             }, new AttackInput(Controller.Key_Heavy, InputMotions.Down))
             {
@@ -1434,11 +1434,11 @@ namespace ChromaCore.Code.Objects.Players.Characters
                 }
             });
 
-            attacks.Add(new Attack(new Animation("Characters/Jet/att_qcfSpecial_Cancel", 2, 6, new Vector2(64))
+            attacks.Add(new Attack(new Animation("Characters/Jet/att_qcfHeavy_Cancel", 2, 6, new Vector2(64))
             {
                 particles = new AnimationParticle[]
                 {
-                    new AnimationParticle(new Animation("Characters/Jet/att_qcfSpecial_Cancel_Particle", 3, 4, new Vector2(64), false), 1, 12)
+                    new AnimationParticle(new Animation("Characters/Jet/att_qcfHeavy_Cancel_Particle", 3, 4, new Vector2(64), false), 1, 12)
                 }
             })
             {
@@ -1447,7 +1447,7 @@ namespace ChromaCore.Code.Objects.Players.Characters
                 groundedness = 1
             });
 
-            attacks.Add(new Attack(new Animation("Characters/Jet/att_qcfSpecial_NoFire", 13, 4, new Vector2(64), false), new AttackInput(Controller.Key_Heavy, InputMotions.DPForward))
+            attacks.Add(new Attack(new Animation("Characters/Jet/att_qcfHeavy_NoFire", 13, 4, new Vector2(64), false), new AttackInput(Controller.Key_Heavy, InputMotions.DPForward))
             {
                 name = "Jet Uppercut No Fire",
                 groundedness = 1,
@@ -2948,157 +2948,6 @@ namespace ChromaCore.Code.Objects.Players.Characters
                     AddHurtbox(40, 12, -12, -10);       //Head
                     AddHurtbox(72, 40, -4, 16);         //Chest
                     AddHurtbox(112, 32, 8, 52);         //Feet
-                }
-            }
-
-
-            if (state == States.Attack && attack.name == "Guard Light")
-            {
-                hurtboxes.Clear();
-                if (animation.currentFrame == 1)
-                {
-                    AddHurtbox(52, 32, 2, -12);     //Chest
-                    AddHurtbox(64, 32, 0, 20);      //Legs
-                    AddHurtbox(80, 32, 0, 52);      //Feet
-                }
-                else if (animation.currentFrame == 2)
-                {
-                    AddHurtbox(56, 32, 16, -24);    //Chest
-                    AddHurtbox(80, 36, 20, 10);     //Legs
-                    AddHurtbox(72, 40, 8, 48);      //Feet
-                }
-                else if (animation.currentFrame <= 4)
-                {
-                    AddHurtbox(56, 36, 24, -26);    //Chest
-                    AddHurtbox(80, 36, 24, 10);     //Legs
-                    AddHurtbox(72, 40, 12, 48);     //Feet
-                }
-                else if (animation.currentFrame == 5)
-                {
-                    AddHurtbox(56, 32, 16, -24);    //Chest
-                    AddHurtbox(64, 36, 20, 10);     //Legs
-                    AddHurtbox(72, 40, 12, 48);     //Feet
-                }
-                else if (animation.currentFrame == 6)
-                {
-                    AddHurtbox(52, 36, 6, -14);     //Chest
-                    AddHurtbox(64, 32, 4, 20);      //Legs
-                    AddHurtbox(80, 32, 0, 52);      //Feet
-                }
-            }
-
-            if (state == States.Attack && attack.name == "Guard Heavy")
-            {
-                hurtboxes.Clear();
-                if (animation.currentFrame == 1)
-                {
-                    AddHurtbox(40, 16, 0, -4);          //Head
-                    AddHurtbox(64, 32, 4, 20);          //Chest
-                    AddHurtbox(96, 32, -4, 52);         //Legs
-                }
-                else if (animation.currentFrame == 2)
-                {
-                    AddHurtbox(24, 16, -24, -36);       //Head
-                    AddHurtbox(32, 32, -24, -12);       //Chest
-                    AddHurtbox(40, 32, -20, 20);        //Legs
-                    AddHurtbox(48, 32, -16, 52);        //Feet
-                }
-                else if (animation.currentFrame == 3)
-                {
-                    AddHurtbox(24, 16, -24, -36);       //Head
-                    AddHurtbox(40, 32, -20, -12);       //Chest
-                    AddHurtbox(48, 32, -16, 20);        //Legs
-                    AddHurtbox(48, 32, -16, 52);        //Feet
-                }
-                else if (animation.currentFrame == 4)
-                {
-                    AddHurtbox(24, 20, -12, -38);       //Head
-                    AddHurtbox(40, 32, -8, -12);        //Chest
-                    AddHurtbox(48, 32, -12, 20);        //Legs
-                    AddHurtbox(48, 32, -12, 52);        //Feet
-                }
-                else if (animation.currentFrame <= 6)
-                {
-                    AddHurtbox(40, 32, -8, -12);        //Chest
-                    AddHurtbox(48, 32, -12, 20);        //Legs
-                    AddHurtbox(48, 32, -12, 52);        //Feet
-                }
-                else if (animation.currentFrame == 7)
-                {
-                    AddHurtbox(56, 32, -16, 20);        //Legs
-                    AddHurtbox(64, 32, -8, 52);         //Feet
-                }
-                else if (animation.currentFrame == 8)
-                {
-                    AddHurtbox(48, 32, 16, -12);        //Head
-                    AddHurtbox(72, 32, 8, 20);          //Legs
-                    AddHurtbox(80, 32, 0, 52);          //Feet
-                }
-                else if (animation.currentFrame == 9)
-                {
-                    AddHurtbox(40, 16, 16, -32);        //Head
-                    AddHurtbox(48, 28, 16, -10);        //Chest
-                    AddHurtbox(48, 24, 56, 0);          //Arm
-                    AddHurtbox(80, 32, 16, 20);         //Legs
-                    AddHurtbox(88, 32, 8, 52);          //Feet
-                }
-                else if (animation.currentFrame == 10)
-                {
-                    AddHurtbox(40, 20, 12, -22);        //Head
-                    AddHurtbox(80, 24, 24, 0);          //Chest
-                    AddHurtbox(64, 24, 4, 24);          //Legs
-                    AddHurtbox(96, 32, 8, 52);          //Feet
-                }
-                else if (animation.currentFrame == 11)
-                {
-                    AddHurtbox(40, 16, 8, -20);         //Head
-                    AddHurtbox(80, 24, 16, 0);           //Chest
-                    AddHurtbox(72, 24, 4, 24);          //Legs
-                    AddHurtbox(96, 32, 0, 52);          //Feet
-                }
-                else if (animation.currentFrame <= 14)
-                {
-                    AddHurtbox(40, 16, 0, -28);         //Head
-                    AddHurtbox(64, 24, 0, -8);          //Chest
-                    AddHurtbox(64, 32, -4, 20);         //Legs
-                    AddHurtbox(88, 32, 0, 52);          //Feet
-                }
-            }
-
-            if (state == States.Attack && attack.name == "Guard Special")
-            {
-                hurtboxes.Clear();
-                if (animation.currentFrame == 1)
-                {
-                    AddHurtbox(52, 32, 2, -12);     //Chest
-                    AddHurtbox(64, 32, 0, 20);      //Legs
-                    AddHurtbox(80, 32, 0, 52);      //Feet
-                }
-                else if (animation.currentFrame == 2)
-                {
-                    AddHurtbox(40, 16, -8, -36);    //Head
-                    AddHurtbox(54, 32, -4, -12);    //Chest
-                    AddHurtbox(64, 32, -4, 20);     //Legs
-                    AddHurtbox(80, 32, -0, 52);     //Feet
-                }
-                else if (animation.currentFrame <= 4)
-                {
-                    AddHurtbox(40, 16, -8, -36);    //Head
-                    AddHurtbox(54, 32, -4, -12);    //Chest
-                    AddHurtbox(64, 32, -4, 20);     //Legs
-                    AddHurtbox(80, 32, -0, 52);     //Feet
-                }
-                else if (animation.currentFrame <= 7)
-                {
-                    AddHurtbox(56, 16, 16, -4);     //Chest
-                    AddHurtbox(64, 32, 12, 20);     //Legs
-                    AddHurtbox(80, 32, 8, 52);      //Feet
-                }
-                else if (animation.currentFrame <= 9)
-                {
-                    AddHurtbox(40, 24, 0, -8);      //Chest
-                    AddHurtbox(64, 32, 4, 20);      //Legs
-                    AddHurtbox(80, 32, 0, 52);      //Feet
                 }
             }
         }
