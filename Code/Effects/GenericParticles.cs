@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ChromaCore.Code.Effects
+namespace RCArena.Code.Effects
 {
     public static class GenericParticles
     {

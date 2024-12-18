@@ -1,7 +1,7 @@
-﻿using ChromaCore.Code.Effects;
-using ChromaCore.Code.Objects;
+﻿using RCArena.Code.Effects;
+using RCArena.Code.Objects;
 
-namespace ChromaCore.Code.Utils.Combat
+namespace RCArena.Code.Utils.Combat
 {
     public class Attack
     {
@@ -53,8 +53,8 @@ namespace ChromaCore.Code.Utils.Combat
         /// <summary>
         /// <para>What the move can be canceled into on hit</para>
         /// <para>1 = light level</para>
-        /// <para>2 = heavy level</para>
-        /// <para>3 = special / command normal level</para>
+        /// <para>2 = medium level</para>
+        /// <para>3 = heavy / command normal level</para>
         /// <para>4 = input special level</para>
         /// <para>5 = super level</para>
         /// <para>1 by default</para>

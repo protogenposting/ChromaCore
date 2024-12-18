@@ -1,4 +1,4 @@
-﻿namespace ChromaCore.Code.UI
+﻿namespace RCArena.Code.UI
 {
     /// <summary>
     /// <para>Overrides the current UI to display in the center of the screen</para>

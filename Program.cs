@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ChromaCore
+namespace RCArena
 {
     public static class Program
     {

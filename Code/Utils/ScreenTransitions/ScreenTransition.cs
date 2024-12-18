@@ -1,4 +1,4 @@
-﻿namespace ChromaCore.Code.Utils.ScreenTransitions
+﻿namespace RCArena.Code.Utils.ScreenTransitions
 {
     public class ScreenTransition : IDisposable
     {

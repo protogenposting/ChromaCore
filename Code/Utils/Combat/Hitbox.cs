@@ -1,12 +1,12 @@
-﻿using ChromaCore.Code.Effects;
-using ChromaCore.Code.Objects;
-using ChromaCore.Code.Scenes;
+﻿using RCArena.Code.Effects;
+using RCArena.Code.Objects;
+using RCArena.Code.Scenes;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Reflection.Emit;
-using static ChromaCore.Code.Objects.Fighter;
+using static RCArena.Code.Objects.Fighter;
 
-namespace ChromaCore.Code.Utils.Combat
+namespace RCArena.Code.Utils.Combat
 {
     public class Hitbox : GameObject
     {

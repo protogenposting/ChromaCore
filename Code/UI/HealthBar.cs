@@ -1,7 +1,7 @@
-﻿using ChromaCore.Code.Objects;
-using ChromaCore.Code.Scenes;
+﻿using RCArena.Code.Objects;
+using RCArena.Code.Scenes;
 
-namespace ChromaCore.Code.UI
+namespace RCArena.Code.UI
 {
     public class HealthBar : UIElement
     {

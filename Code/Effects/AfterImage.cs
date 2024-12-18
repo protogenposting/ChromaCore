@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.Xna.Framework.Graphics;
-using ChromaCore.Code.Objects;
+using RCArena.Code.Objects;
 
-namespace ChromaCore.Code.Effects
+namespace RCArena.Code.Effects
 {
     public class AfterImage : Particle
     {

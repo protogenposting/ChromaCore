@@ -1,4 +1,4 @@
-﻿namespace ChromaCore.Code.UI
+﻿namespace RCArena.Code.UI
 {
     /// <summary>
     /// Customizable grid of UI elements that can be traversed by a menu cursor

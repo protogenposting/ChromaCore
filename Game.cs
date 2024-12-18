@@ -1,11 +1,11 @@
-﻿global using ChromaCore.Code.UI;
-global using ChromaCore.Code.Utils;
-global using ChromaCore.Code.Utils.Collision;
-global using ChromaCore.Code.Utils.Combat;
-global using ChromaCore.Code.Utils.Input;
-global using ChromaCore.Code.Utils.Map;
-global using ChromaCore.Code.Utils.ScreenTransitions;
-global using ChromaCore.Code.Utils.Visual;
+﻿global using RCArena.Code.UI;
+global using RCArena.Code.Utils;
+global using RCArena.Code.Utils.Collision;
+global using RCArena.Code.Utils.Combat;
+global using RCArena.Code.Utils.Input;
+global using RCArena.Code.Utils.Map;
+global using RCArena.Code.Utils.ScreenTransitions;
+global using RCArena.Code.Utils.Visual;
 global using Microsoft.Xna.Framework;
 global using Microsoft.Xna.Framework.Audio;
 global using Microsoft.Xna.Framework.Graphics;
@@ -18,9 +18,9 @@ global using System.Linq;
 global using System.Text;
 global using System.Threading;
 global using System.Threading.Tasks;
-using ChromaCore.Code.Scenes;
+using RCArena.Code.Scenes;
 
-namespace ChromaCore
+namespace RCArena
 {
     public class Game : Microsoft.Xna.Framework.Game
     {

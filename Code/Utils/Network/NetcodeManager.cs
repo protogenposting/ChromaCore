@@ -5,11 +5,11 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
-using ChromaCore.Code.Effects;
-using ChromaCore.Code.Objects;
-using ChromaCore.Code.Scenes;
+using RCArena.Code.Effects;
+using RCArena.Code.Objects;
+using RCArena.Code.Scenes;
 
-namespace ChromaCore.Code.Utils.Network
+namespace RCArena.Code.Utils.Network
 {
     public class NetcodeManager
     {

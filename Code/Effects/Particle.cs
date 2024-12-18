@@ -1,6 +1,6 @@
-﻿using ChromaCore.Code.Objects;
+﻿using RCArena.Code.Objects;
 
-namespace ChromaCore.Code.Effects
+namespace RCArena.Code.Effects
 {
     public class Particle : GameObject
     {

@@ -4,11 +4,11 @@ using System.Linq;
 using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
-using ChromaCore.Code.Effects;
-using ChromaCore.Code.Scenes;
+using RCArena.Code.Effects;
+using RCArena.Code.Scenes;
 using static System.Formats.Asn1.AsnWriter;
 
-namespace ChromaCore.Code.Objects
+namespace RCArena.Code.Objects
 {
     public abstract class Fighter : GameObject
     {
@@ -40,6 +40,8 @@ namespace ChromaCore.Code.Objects
             WallBounce
         }
 
+        public virtual MusicTrack ThemeSong => new CompoundMusicTrack("Music/track1intro", 9.193, "Music/track1loop", 24.774);
+
         public int ID;
         public Fighter nearestPlayer;
 
@@ -70,6 +72,7 @@ namespace ChromaCore.Code.Objects
         public int armorFrames;
         public int armorFlash;
         public bool hasDoubleJump = false;
+        public List<Attack> comboAttacksUsed = new List<Attack>();
 
         /// <summary>
         /// Right pressed minus left pressed
@@ -221,6 +224,7 @@ namespace ChromaCore.Code.Objects
             input.ClearAllBuffers();
             position = scene.room.spawn[ID % 2];
             CollisionCorrection();
+
             if (attacks.Count != 0) attack = attacks[0];
 
             if (controllerProfile != null)
@@ -420,7 +424,14 @@ namespace ChromaCore.Code.Objects
                 foreach (Attack a in attacks)
                 {
                     int dir = (nearestPlayer != null && position.X != nearestPlayer.position.X && Grounded) ? Math.Sign(nearestPlayer.position.X - position.X) : direction;
-                    if ((a.canUse == null || a.canUse(a)) && a.input != null && (!CommitedState || (state == States.Attack && (hasHitPlayer || hasHitBlock || (attackTimer <= 3 && attack?.input != null && attack.input.Button != a.input.Button)) && attack.canCancel && a.cancelLevel > attack.cancelLevel)) && a.input.CheckInput(input, dir))
+                    
+                    bool moveUsable = (a.canUse == null || a.canUse(a)) && a.input != null;
+                    bool karaCancel = attackTimer <= 3 && (attack.input != null && a.input != null && attack.input.Button != a.input.Button);
+                    bool stringCancel = attack.cancelLevel <= 3 ? (a.cancelLevel >= attack.cancelLevel && !comboAttacksUsed.Contains(a)) : a.cancelLevel > attack.cancelLevel;
+                    bool canCancel = (hasHitPlayer || hasHitBlock || karaCancel) && attack.canCancel && stringCancel;
+                    bool validState = !CommitedState || (state == States.Attack && canCancel);
+
+                    if (moveUsable && validState && a.input.CheckInput(input, dir))
                     {
                         if (a.groundedness == 0 || (a.groundedness == 1 && Grounded && velocity.Y >= 0) || (a.groundedness == 2 && !Grounded))
                         {
@@ -440,14 +451,10 @@ namespace ChromaCore.Code.Objects
             if (state == States.Attack && attack.primaryHurtbox != null) hurtboxes[0] = attack.primaryHurtbox;
 
             //Attacks
-            if (state == States.Attack)
+            if (state == States.Attack && hitstunTimer <= 0)
             {
                 attack.attackUpdate?.Invoke(attack);
                 AttackUpdate();
-            }
-
-            if (state == States.Attack && hitstunTimer <= 0)
-            {
                 animation = attack.anim;
                 attackTimer++;
                 if (attackTimer > attack.duration && attack.duration != -1)
@@ -508,6 +515,7 @@ namespace ChromaCore.Code.Objects
                 attackTimer = 0;
                 hasHitPlayer = false;
                 hasHitBlock = false;
+                comboAttacksUsed.Clear();
             }
 
             //Hitstun and combos
@@ -798,6 +806,7 @@ namespace ChromaCore.Code.Objects
                 attackTimer = 0;
                 DestroyHitboxes();
                 overrideHitboxGroups.Clear();
+                comboAttacksUsed.Add(att);
                 if (resetHitCheck) hasHitPlayer = false;
                 if (resetHitCheck) hasHitBlock = false;
                 if (att.input != null) input.ClearBuffer(att.input.Button);
@@ -1182,6 +1191,7 @@ namespace ChromaCore.Code.Objects
             state.Add("dontDraw", dontDraw);
             state.Add("dontPushPlayer", dontPushPlayer);
             state.Add("overrideHitboxGroups", new List<int>(overrideHitboxGroups));
+            state.Add("comboAttacksUsed", new List<Attack>(comboAttacksUsed));
             state.Add("input", input.ToBytes());
             return state;
         }
@@ -1231,6 +1241,7 @@ namespace ChromaCore.Code.Objects
             dontDraw = (bool)state["dontDraw"];
             dontPushPlayer = (bool)state["dontPushPlayer"];
             overrideHitboxGroups = new List<int>((List<int>)state["overrideHitboxGroups"]);
+            comboAttacksUsed = new List<Attack>((List<Attack>)state["comboAttacksUsed"]);
             input.ReadBytes((byte[])state["input"]);
         }
 

@@ -5,10 +5,10 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
-using ChromaCore.Code.Objects.Players.Characters;
-using ChromaCore.Code.Scenes;
+using RCArena.Code.Objects.Players.Characters;
+using RCArena.Code.Scenes;
 
-namespace ChromaCore.Code.Utils.Network
+namespace RCArena.Code.Utils.Network
 {
     public class ConnectionScreen : Scene
     {

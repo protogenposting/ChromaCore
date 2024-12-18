@@ -1,5 +1,5 @@
-﻿using ChromaCore.Code.Objects.Players.Characters;
-using ChromaCore.Code.Utils.Network;
+﻿using RCArena.Code.Objects.Players.Characters;
+using RCArena.Code.Utils.Network;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -10,7 +10,7 @@ using System.Text;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 
-namespace ChromaCore.Code.Scenes
+namespace RCArena.Code.Scenes
 {
     internal class CharacterSelect : Scene
     {
@@ -37,6 +37,7 @@ namespace ChromaCore.Code.Scenes
             CSSIcon[,] charIcons = new CSSIcon[,]
             {
                 { new CSSIcon(typeof(Jet), "Characters/Jet/CSSIcon") { onClick = SelectCharacter, paletteCount = 6 } },
+                { new CSSIcon(typeof(Kyoki), "Characters/Kyoki/CSSIcon") { onClick = SelectCharacter, paletteCount = 2 } },
             };
             for (int x = 0; x < charIcons.GetLength(0); x++)
             {

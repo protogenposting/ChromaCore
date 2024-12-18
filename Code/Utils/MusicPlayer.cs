@@ -1,4 +1,4 @@
-﻿namespace ChromaCore.Code.Utils
+﻿namespace RCArena.Code.Utils
 {
     public class MusicPlayer
     {

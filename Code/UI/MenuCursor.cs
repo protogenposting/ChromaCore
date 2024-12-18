@@ -1,4 +1,4 @@
-﻿namespace ChromaCore.Code.UI
+﻿namespace RCArena.Code.UI
 {
     public class MenuCursor : IDisposable
     {

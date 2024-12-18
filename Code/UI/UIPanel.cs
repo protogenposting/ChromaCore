@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ChromaCore.Code.UI
+namespace RCArena.Code.UI
 {
     public class UIPanel : UIElement
     {

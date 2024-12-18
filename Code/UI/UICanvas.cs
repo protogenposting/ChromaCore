@@ -1,4 +1,4 @@
-﻿namespace ChromaCore.Code.UI
+﻿namespace RCArena.Code.UI
 {
     /// <summary>
     /// Base container for storing all UI elements on a scene

@@ -1,7 +1,7 @@
-﻿using ChromaCore.Code.Effects;
-using ChromaCore.Code.Objects;
+﻿using RCArena.Code.Effects;
+using RCArena.Code.Objects;
 
-namespace ChromaCore.Code.Utils.Visual
+namespace RCArena.Code.Utils.Visual
 {
     /// <summary>
     /// <para>Basic class for breaking up a sprite sheet and drawing the corresponding frame</para>
@@ -162,6 +162,22 @@ namespace ChromaCore.Code.Utils.Visual
         }
 
         public CompoundAnimation(Texture2D spriteSheet, int startupFrameCount, int loopFrameCount, int frameRate, Vector2 cellSize, int startupFrameRate = -1) : base(spriteSheet, startupFrameCount + loopFrameCount, frameRate, cellSize, true)
+        {
+            startupFrames = startupFrameCount;
+            loopFrames = loopFrameCount;
+            frames = startupFrames + loopFrames;
+            this.startupFrameRate = startupFrameRate;
+        }
+
+        public CompoundAnimation(string spriteSheetURL, int startupFrameCount, int loopFrameCount, int frameRate, int startupFrameRate = -1) : base(spriteSheetURL, startupFrameCount + loopFrameCount, frameRate, true)
+        {
+            startupFrames = startupFrameCount;
+            loopFrames = loopFrameCount;
+            frames = startupFrames + loopFrames;
+            this.startupFrameRate = startupFrameRate;
+        }
+
+        public CompoundAnimation(Texture2D spriteSheet, int startupFrameCount, int loopFrameCount, int frameRate, int startupFrameRate = -1) : base(spriteSheet, startupFrameCount + loopFrameCount, frameRate, true)
         {
             startupFrames = startupFrameCount;
             loopFrames = loopFrameCount;

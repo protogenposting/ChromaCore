@@ -1,6 +1,6 @@
-﻿using ChromaCore.Code.Scenes;
+﻿using RCArena.Code.Scenes;
 
-namespace ChromaCore.Code.Utils.ScreenTransitions
+namespace RCArena.Code.Utils.ScreenTransitions
 {
     public class CircleTransition : ScreenTransition
     {

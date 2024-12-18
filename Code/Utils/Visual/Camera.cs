@@ -1,7 +1,7 @@
-﻿using ChromaCore.Code.Objects;
-using ChromaCore.Code.Scenes;
+﻿using RCArena.Code.Objects;
+using RCArena.Code.Scenes;
 
-namespace ChromaCore.Code.Utils.Visual
+namespace RCArena.Code.Utils.Visual
 {
     public class Camera
     {

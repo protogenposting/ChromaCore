@@ -6,10 +6,10 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using System.Diagnostics;
-using ChromaCore.Code.Scenes;
-using ChromaCore.Code.Effects;
+using RCArena.Code.Scenes;
+using RCArena.Code.Effects;
 
-namespace ChromaCore.Code.Objects.Players.Characters
+namespace RCArena.Code.Objects.Players.Characters
 {
     public class Jet : Fighter
     {
@@ -1579,7 +1579,7 @@ namespace ChromaCore.Code.Objects.Players.Characters
                 name = "Grab",
                 duration = 120,
                 groundedness = 1,
-                cancelLevel = 2,
+                cancelLevel = 1,
                 canCancel = false,
                 hitboxes = new HitboxSpawner[]
                 {
@@ -1605,7 +1605,7 @@ namespace ChromaCore.Code.Objects.Players.Characters
             {
                 name = "Grab Miss",
                 groundedness = 1,
-                cancelLevel = 1,
+                cancelLevel = 0,
                 canCancel = false
             });
             //Grab Release
@@ -1614,7 +1614,7 @@ namespace ChromaCore.Code.Objects.Players.Characters
                 name = "Grab Release",
                 duration = 15,
                 groundedness = 1,
-                cancelLevel = 1,
+                cancelLevel = 0,
                 canCancel = false
             });
 
@@ -1734,7 +1734,7 @@ namespace ChromaCore.Code.Objects.Players.Characters
             {
                 name = "Air Grab",
                 groundedness = 2,
-                cancelLevel = 2,
+                cancelLevel = 1,
                 landingLag = 12,
                 canCancel = false,
                 canUse = CanUseFireMoves,

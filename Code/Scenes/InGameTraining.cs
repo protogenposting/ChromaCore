@@ -6,11 +6,11 @@ using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Audio;
 using System.Linq;
-using ChromaCore.Code.Objects;
-using ChromaCore.Code.Objects.Players.Characters;
-using ChromaCore.Code.Utils.Network;
+using RCArena.Code.Objects;
+using RCArena.Code.Objects.Players.Characters;
+using RCArena.Code.Utils.Network;
 
-namespace ChromaCore.Code.Scenes
+namespace RCArena.Code.Scenes
 {
     public class InGameTraining : InGame
     {
@@ -90,7 +90,7 @@ namespace ChromaCore.Code.Scenes
                         [
                             players[0].currentPalette, players[1].currentPalette
                         ], roomType)
-                        { displayHitboxes = displayHitboxes, forceCounterHit = forceCounterHit, characterSettings = characterSettings };
+                        { displayHitboxes = displayHitboxes, forceCounterHit = forceCounterHit, characterSettings = characterSettings, music = music };
 
                         Game.Instance.ChangeScene(scene, (s) =>
                         {

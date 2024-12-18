@@ -1,11 +1,11 @@
-﻿using ChromaCore.Code.Effects;
-using ChromaCore.Code.Objects;
-using ChromaCore.Code.Objects.Players.Characters;
-using ChromaCore.Code.Stages;
-using ChromaCore.Code.Utils.Network;
+﻿using RCArena.Code.Effects;
+using RCArena.Code.Objects;
+using RCArena.Code.Objects.Players.Characters;
+using RCArena.Code.Stages;
+using RCArena.Code.Utils.Network;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace ChromaCore.Code.Scenes
+namespace RCArena.Code.Scenes
 {
     public class InGame : Scene
     {
@@ -18,6 +18,7 @@ namespace ChromaCore.Code.Scenes
 
         public Type roomType;
         public Room room;
+        public MusicTrack music;
 
         public Color ambientLight = Color.LightGray;
         public List<Light> lights = new List<Light>();
@@ -111,7 +112,14 @@ namespace ChromaCore.Code.Scenes
 
             if (!InfiniteTime) versusTimer = 120 * 60;
 
-            Game.Instance.music.FadeTo(new CompoundMusicTrack("Music/track1intro", 9.193, "Music/track1loop", 24.774), 60);
+            if (music == null)
+            {
+                if (Game.Instance.random.Next(2) == 0)
+                    music = players[0].ThemeSong;
+                else
+                    music = players[1].ThemeSong;
+                Game.Instance.music.FadeTo(music, 60);
+            }
 
             camera.Update(true);
 

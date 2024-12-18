@@ -1,4 +1,4 @@
-﻿namespace ChromaCore.Code.Scenes
+﻿namespace RCArena.Code.Scenes
 {
     /// <summary>
     /// <para>Basic container to handle game rules and logic</para>

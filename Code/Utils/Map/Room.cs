@@ -1,4 +1,4 @@
-﻿namespace ChromaCore.Code.Utils.Map
+﻿namespace RCArena.Code.Utils.Map
 {
     /// <summary>
     /// <para>Contains the tilemap, camera bounds, and a draw function that get called by InGame</para>

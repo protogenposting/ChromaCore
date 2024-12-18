@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using ChromaCore.Code.Scenes;
+using RCArena.Code.Scenes;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
 
-namespace ChromaCore.Code.Stages
+namespace RCArena.Code.Stages
 {
     public class TestRoom : Room
     {

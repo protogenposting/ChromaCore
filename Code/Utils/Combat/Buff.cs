@@ -1,4 +1,4 @@
-﻿using ChromaCore.Code.Objects;
+﻿using RCArena.Code.Objects;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ChromaCore.Code.Utils.Combat
+namespace RCArena.Code.Utils.Combat
 {
     public class Buff
     {

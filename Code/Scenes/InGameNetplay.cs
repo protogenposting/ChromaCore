@@ -4,10 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
-using ChromaCore.Code.Objects;
-using ChromaCore.Code.Utils.Network;
+using RCArena.Code.Objects;
+using RCArena.Code.Utils.Network;
 
-namespace ChromaCore.Code.Scenes
+namespace RCArena.Code.Scenes
 {
     internal class InGameNetplay : InGame
     {

@@ -1,8 +1,8 @@
-﻿using ChromaCore.Code.Effects;
-using ChromaCore.Code.Scenes;
+﻿using RCArena.Code.Effects;
+using RCArena.Code.Scenes;
 using System;
 
-namespace ChromaCore.Code.Objects
+namespace RCArena.Code.Objects
 {
     /// <summary>
     /// <para>Basic class for interacting with the InGame environment</para>

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ChromaCore.Code.Utils
+namespace RCArena.Code.Utils
 {
     public static class HelperFunctions
     {

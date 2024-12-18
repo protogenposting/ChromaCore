@@ -7,7 +7,7 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 
-namespace ChromaCore.Code.Utils.Network
+namespace RCArena.Code.Utils.Network
 {
     public class NetConnection
     {

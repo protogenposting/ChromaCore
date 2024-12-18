@@ -2,7 +2,7 @@
 using System.Text.Json;
 using System.Text.Json.Nodes;
 
-namespace ChromaCore.Code.Utils
+namespace RCArena.Code.Utils
 {
     public static class DataManager
     {

@@ -1,4 +1,4 @@
-﻿namespace ChromaCore.Code.UI
+﻿namespace RCArena.Code.UI
 {
     /// <summary>
     /// Base class for implementing UI with a built in onClick function

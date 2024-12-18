@@ -1,6 +1,6 @@
-﻿using ChromaCore.Code.Objects;
+﻿using RCArena.Code.Objects;
 
-namespace ChromaCore.Code.Utils.Collision
+namespace RCArena.Code.Utils.Collision
 {
     /// <summary>
     /// Collides in a rectangle with directional checks

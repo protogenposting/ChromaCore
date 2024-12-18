@@ -1,7 +1,7 @@
-﻿using ChromaCore.Code.Objects;
-using ChromaCore.Code.Scenes;
+﻿using RCArena.Code.Objects;
+using RCArena.Code.Scenes;
 
-namespace ChromaCore.Code.Utils.Map
+namespace RCArena.Code.Utils.Map
 {
     /// <summary>
     /// Contains methods for setting up tiles in InGame

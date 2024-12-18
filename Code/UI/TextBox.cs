@@ -1,4 +1,4 @@
-﻿namespace ChromaCore.Code.UI
+﻿namespace RCArena.Code.UI
 {
     /// <summary>
     /// Allows keyboard input into the ui to ouput the entered text

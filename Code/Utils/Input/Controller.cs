@@ -1,8 +1,8 @@
-﻿using ChromaCore.Code.Scenes;
+﻿using RCArena.Code.Scenes;
 using Microsoft.Xna.Framework.Input;
 using System.Xml;
 
-namespace ChromaCore.Code.Utils.Input
+namespace RCArena.Code.Utils.Input
 {
     /// <summary>
     /// <para>Basic class for managing keyboard and controller input</para>
@@ -52,8 +52,8 @@ namespace ChromaCore.Code.Utils.Input
             keyBind[Key_MenuLB] = Keys.D1;
             keyBind[Key_MenuRB] = Keys.D2;
 
-            padBind[Key_MenuConfirm] = Buttons.A;
-            padBind[Key_MenuBack] = Buttons.B;
+            padBind[Key_MenuConfirm] = CorrectedButton(Buttons.A);
+            padBind[Key_MenuBack] = CorrectedButton(Buttons.B);
             padBind[Key_Start] = Buttons.Start;
             padBind[Key_Select] = Buttons.Back;
             padBind[Key_Up] = Buttons.LeftThumbstickUp;
@@ -105,6 +105,7 @@ namespace ChromaCore.Code.Utils.Input
             SetBinds();
         }
 
+        //Flips face buttons for nintendo controllers
         public Buttons CorrectedButton(Buttons originalButton)
         {
             if (GamePad.GetCapabilities(id).DisplayName != null && GamePad.GetCapabilities(id).DisplayName.Contains("Nintendo"))

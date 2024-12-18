@@ -1,6 +1,6 @@
-﻿using ChromaCore.Code.Objects;
+﻿using RCArena.Code.Objects;
 
-namespace ChromaCore.Code.Utils.Map
+namespace RCArena.Code.Utils.Map
 {
     /// <summary>
     /// Static GameObject that, by default, never moves and is used for physics collisions
