@@ -20,6 +20,8 @@ namespace RCArena.Code.Scenes
         ButtonMatrix characterIcons;
         ButtonMatrix readyButton;
 
+        List<Controller> fakeControllers = new List<Controller>();
+
         List<Type> characterList = new List<Type>();
 
         NetConnection netConnection;
@@ -30,7 +32,7 @@ namespace RCArena.Code.Scenes
 
         public Gamemodes gamemode = Gamemodes.Versus;
 
-        public CharacterSelect(int[] controllers)
+        public CharacterSelect()
         {
             UI = new UICanvas();
 
@@ -101,11 +103,14 @@ namespace RCArena.Code.Scenes
                 if (c.position != pos) palettes[cursors.IndexOf(c)] = 0;
             };
 
-            foreach (int i in controllers)
+            for (int i = -1; i < 4; i++)
             {
-                if (i == -2) cursors.Add(null);
-                else cursors.Add(new MenuCursor(i, characterIcons));
+                fakeControllers.Add(new Controller(i));
+                fakeControllers[^1].UpdateKeys(1);
+                fakeControllers[^1].ClearAllBuffers();
             }
+
+            cursors = [null, null];
 
             UI.buttonMatricies.Add(characterIcons);
             UI.buttonMatricies.Add(readyButton);
@@ -116,31 +121,29 @@ namespace RCArena.Code.Scenes
                 new TextBlock("Profile: " + playerProfiles[0].name, "ExampleContent/UIFont", Color.White, "UI/Menu/MenuButton", 1600, 80) {drawScale = 1.5f}
             };
 
-            UI.elements.AddRange(profileText);
-            if (controllers[0] >= 0) profileText[0].text = "Select | " + profileText[0].text;
-            else if (controllers[0] == -1) profileText[0].text = "Tab | " + profileText[0].text;
-            else UI.elements.Remove(profileText[0]);
-            if (controllers[1] >= 0) profileText[1].text = profileText[1].text + " | Select";
-            else if (controllers[1] == -1) profileText[1].text = profileText[1].text + " | Tab";
-            else UI.elements.Remove(profileText[1]);
-
             int[] loadedProfiles = DataManager.GetLastUsedProfiles();
             if (loadedProfiles != null)
             {
                 playerProfiles[0] = DataManager.controllerProfiles[loadedProfiles[0]];
                 profileText[0].text = "Profile: " + playerProfiles[0].name;
-                if (controllers[0] == -1) profileText[0].text = "Tab | " + profileText[0].text;
 
                 playerProfiles[1] = DataManager.controllerProfiles[loadedProfiles[1]];
                 profileText[1].text = "Profile: " + playerProfiles[1].name;
-                if (controllers[1] == -1) profileText[1].text = profileText[1].text + " | Tab";
             }
 
             Game.Instance.music.FadeOut(120);
         }
-
-        public CharacterSelect(NetConnection connection, int controller) : this([controller, -2])
+        public CharacterSelect(int[] controllers) : this()
         {
+            UI.elements.AddRange(profileText);
+            if (controllers[0] >= -1) cursors[0] = new MenuCursor(controllers[0], characterIcons);
+            if (controllers[1] >= -1) cursors[1] = new MenuCursor(controllers[1], characterIcons);
+            fakeControllers.RemoveAll(c => c.id == controllers[0] || c.id == controllers[1]);
+        }
+
+        public CharacterSelect(NetConnection connection, int controller) : this()
+        {
+            cursors = [new MenuCursor(controller, characterIcons), null];
             this.netConnection = connection;
             gamemode = Gamemodes.Netplay;
         }
@@ -152,6 +155,21 @@ namespace RCArena.Code.Scenes
 
         public override void Update(GameTime gametime)
         {
+            if (netConnection == null && cursors.Where(c => c == null).Count() > 0)
+            {
+                foreach (Controller c in fakeControllers.ToArray())
+                {
+                    c.UpdateKeys(1);
+                    if (c.KeyPressed(Controller.Key_Start) || c.KeyPressed(Controller.Key_MenuConfirm))
+                    {
+                        c.ClearAllBuffers();
+                        UI.AddElement(profileText[cursors[0] == null ? 0 : 1]);
+                        cursors[cursors[0] == null ? 0 : 1] = new MenuCursor(c, characterIcons);
+                        fakeControllers.Remove(c);
+                    }
+                }
+            }
+
             UI.Update();
             foreach (MenuCursor c in cursors.ToArray()) if (c != null)
                 {

@@ -285,10 +285,10 @@ namespace RCArena.Code.Utils.Combat
         /// </summary>
         public Knockback knockback = new Knockback(0, 0, 0, false);
         /// <summary>
-        /// <para>How much the hit affects the gravity scaling of later hits</para>
-        /// <para>1 by default</para>
+        /// <para>How much the knockback can be changed by Directional Influence in degrees</para>
+        /// <para>0 by default</para>
         /// </summary>
-        public float comboScaling = 1;
+        public float DIFactor = 0;
         /// <summary>
         /// <para>The amount of frames the hitbox lasts</para>
         /// <para>3 by default</para>
@@ -419,7 +419,7 @@ namespace RCArena.Code.Utils.Combat
 
         public virtual Hitbox SpawnHitBox()
         {
-            Hitbox h = new Hitbox(owner, damage, knockback, comboScaling, size, offset, hitstun, lifetime, hitpause, hitType, blockstun, blockPush, hitSound, hitboxGroup, hitstunProperties, preHitEffect, active)
+            Hitbox h = new Hitbox(owner, damage, knockback, DIFactor, size, offset, hitstun, lifetime, hitpause, hitType, blockstun, blockPush, hitSound, hitboxGroup, hitstunProperties, preHitEffect, active)
             {
                 hitParticle = hitParticle,
                 postHitEffect = postHitEffect,
@@ -439,7 +439,7 @@ namespace RCArena.Code.Utils.Combat
 
         public virtual Hitbox SpawnHitBox(Vector2 overrideSize = default, Vector2 overrideOffset = default)
         {
-            Hitbox h = new Hitbox(owner, damage, knockback, comboScaling, overrideSize == default ? size : overrideSize, overrideOffset == default ? offset : overrideOffset, hitstun, lifetime, hitpause, hitType, blockstun, blockPush, hitSound, hitboxGroup, hitstunProperties, preHitEffect, active)
+            Hitbox h = new Hitbox(owner, damage, knockback, DIFactor, overrideSize == default ? size : overrideSize, overrideOffset == default ? offset : overrideOffset, hitstun, lifetime, hitpause, hitType, blockstun, blockPush, hitSound, hitboxGroup, hitstunProperties, preHitEffect, active)
             {
                 hitParticle = hitParticle,
                 postHitEffect = postHitEffect,
@@ -536,7 +536,7 @@ namespace RCArena.Code.Utils.Combat
         public override Projectile SpawnHitBox()
         {
             Projectile p = null;
-            if (anim != null) p = new Projectile(owner, damage, knockback, comboScaling, size, offset, anim, velocity, gravity, fallSpeed, hitstun, lifetime, hitpause, hitType, blockstun, blockPush, hitSound, spriteScale, projectileUpdate, hitboxGroup, hitstunProperties, preHitEffect, spawnInBounds, active)
+            if (anim != null) p = new Projectile(owner, damage, knockback, DIFactor, size, offset, anim, velocity, gravity, fallSpeed, hitstun, lifetime, hitpause, hitType, blockstun, blockPush, hitSound, spriteScale, projectileUpdate, hitboxGroup, hitstunProperties, preHitEffect, spawnInBounds, active)
             {
                 hitParticle = hitParticle,
                 transcendent = transcendent,
@@ -550,7 +550,7 @@ namespace RCArena.Code.Utils.Combat
                 groundHurtAnimation = groundHurtAnimation,
                 airHurtAnimation = airHurtAnimation
             };
-            else p = new Projectile(owner, damage, knockback, comboScaling, size, offset, spr, velocity, gravity, fallSpeed, hitstun, lifetime, hitpause, hitType, blockstun, blockPush, hitSound, spriteScale, projectileUpdate, hitboxGroup, hitstunProperties, preHitEffect, spawnInBounds, active)
+            else p = new Projectile(owner, damage, knockback, DIFactor, size, offset, spr, velocity, gravity, fallSpeed, hitstun, lifetime, hitpause, hitType, blockstun, blockPush, hitSound, spriteScale, projectileUpdate, hitboxGroup, hitstunProperties, preHitEffect, spawnInBounds, active)
             {
                 hitParticle = hitParticle,
                 transcendent = transcendent,
@@ -573,7 +573,7 @@ namespace RCArena.Code.Utils.Combat
         public override Projectile SpawnHitBox(Vector2 overrideSize = default, Vector2 overrideOffset = default)
         {
             Projectile p = null;
-            if (anim != null) p = new Projectile(owner, damage, knockback, comboScaling, overrideSize == default ? size : overrideSize, overrideOffset == default ? offset : overrideOffset, anim, velocity, gravity, fallSpeed, hitstun, lifetime, hitpause, hitType, blockstun, blockPush, hitSound, spriteScale, projectileUpdate, hitboxGroup, hitstunProperties, preHitEffect, spawnInBounds, active)
+            if (anim != null) p = new Projectile(owner, damage, knockback, DIFactor, overrideSize == default ? size : overrideSize, overrideOffset == default ? offset : overrideOffset, anim, velocity, gravity, fallSpeed, hitstun, lifetime, hitpause, hitType, blockstun, blockPush, hitSound, spriteScale, projectileUpdate, hitboxGroup, hitstunProperties, preHitEffect, spawnInBounds, active)
             {
                 hitParticle = hitParticle,
                 transcendent = transcendent,
@@ -585,7 +585,7 @@ namespace RCArena.Code.Utils.Combat
                 canOTG = canOTG,
                 affectComboCounter = affectComboCounter
             };
-            else p = new Projectile(owner, damage, knockback, comboScaling, overrideSize == default ? size : overrideSize, overrideOffset == default ? offset : overrideOffset, spr, velocity, gravity, fallSpeed, hitstun, lifetime, hitpause, hitType, blockstun, blockPush, hitSound, spriteScale, projectileUpdate, hitboxGroup, hitstunProperties, preHitEffect, spawnInBounds, active)
+            else p = new Projectile(owner, damage, knockback, DIFactor, overrideSize == default ? size : overrideSize, overrideOffset == default ? offset : overrideOffset, spr, velocity, gravity, fallSpeed, hitstun, lifetime, hitpause, hitType, blockstun, blockPush, hitSound, spriteScale, projectileUpdate, hitboxGroup, hitstunProperties, preHitEffect, spawnInBounds, active)
             {
                 hitParticle = hitParticle,
                 transcendent = transcendent,

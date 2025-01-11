@@ -90,10 +90,8 @@ namespace RCArena.Code.Objects
         public int GetMotionInputDirection => (nearestPlayer != null && position.X != nearestPlayer.position.X && Grounded) ? Math.Sign(nearestPlayer.position.X - position.X) : direction;
 
         public int comboCounter;
-        public float comboScaling;
         public List<HitstunProperties> hitstunProperties = new List<HitstunProperties>();
         public bool airCombo;
-        public bool launched;
         public bool wallBounced;
         public bool groundBounced;
         public List<Buff> buffs = new List<Buff>();
@@ -571,18 +569,25 @@ namespace RCArena.Code.Objects
                         hitstunProperties.Remove(HitstunProperties.ForceGroundBounce);
                         hitstunProperties.Remove(HitstunProperties.GroundBounce);
                     }
-                    else
-                    if (TouchingTile(collider.Bottom, 0, (int)(velocity.Y + gravity + 1)))
+                    else if (velocity.Y >= fallSpeed)
                     {
-                        hitstunTimer = 0;
+                        position.Y += velocity.Y;
+                        CollisionCorrection();
+                        velocity.Y = -8f;
+                        velocity.X /= 2;
+                    }
+                    else
+                    {
                         if (hitstunProperties.Contains(HitstunProperties.Restand)) airCombo = false;
                         else if (hitstunProperties.Contains(HitstunProperties.Knockdown))
                         {
+                            hitstunTimer = 0;
                             knockdownTimer = knockdownDuration;
                             animation = knockdownAnim;
                         }
                         else
                         {
+                            hitstunTimer = 0;
                             knockdownTimer = 20;
 
                             int xDir = 0;
@@ -615,9 +620,7 @@ namespace RCArena.Code.Objects
             else if (knockdownTimer < 10)
             {
                 comboCounter = 0;
-                comboScaling = 0;
                 airCombo = false;
-                launched = false;
                 wallBounced = false;
                 groundBounced = false;
                 if (scene is InGameTraining && knockdownTimer < 5) health = healthMax;
@@ -719,7 +722,7 @@ namespace RCArena.Code.Objects
                 {
                     if (!AirHurtAnims.Contains(animation)) animation = airHurtAnim;
 
-                    else if (hitstunProperties.Contains(HitstunProperties.Restand) || velocity.Y < 1)
+                    else if (hitstunProperties.Contains(HitstunProperties.Restand) || (velocity.Y < -1 && !TouchingTile(collider.Bottom, 0, 48)))
                     {
                         animation.Reset();
                     }
@@ -926,10 +929,9 @@ namespace RCArena.Code.Objects
             if (hitbox.hitType.ToString().Contains("Grab")) grabProtection = 2;
 
             //Cleaning up variables
-            if ((state == States.Attack || state == States.AirStall || state == States.LandingLag || (scene is InGameTraining t2 && t2.forceCounterHit == InGameTraining.CounterHitSetting.On && state != States.Hitstun)) && !hitbox.hitType.ToString().Contains("Grab"))
+            if ((state == States.Attack || state == States.AirStall || state == States.LandingLag) && !hitbox.hitType.ToString().Contains("Grab"))
             {
                 counterHitType = 0;
-                comboScaling = -4;
             }
             dashTimer = 0;
             attackTimer = 0;
@@ -1108,10 +1110,11 @@ namespace RCArena.Code.Objects
 
                 if (hasHitPlayer && attackTimer >= grabbedCheckTime)
                 {
+                    if (!lastPlayerHit.hitstunProperties.Contains(HitstunProperties.Restand)) lastPlayerHit.hitstunProperties.Add(HitstunProperties.Restand);
                     if (lastPlayerHit.TouchingTile(lastPlayerHit.collider.Box, direction * 2, 0)) position.X -= 8 * direction;
                     dontPushPlayer = true;
                     //Subtracting ID to fix update order
-                    lastPlayerHit.hitstunTimer = (int)Math.Clamp(32 - lastPlayerHit.comboScaling * 1.5f, 18, 24) - ID;
+                    lastPlayerHit.hitstunTimer = (int)Math.Clamp(32 - lastPlayerHit.comboCounter * 1.5f, 16, 22) - ID;
                     lastPlayerHit.position = Vector2.Lerp(lastPlayerHit.position, position + (holdPosition != default ? holdPosition : new Vector2(64 * direction, -24)), 0.75f);
                     lastPlayerHit.velocity.X = 0;
                     lastPlayerHit.velocity.Y = -lastPlayerHit.gravity;
@@ -1128,11 +1131,10 @@ namespace RCArena.Code.Objects
                         direction *= -1;
                     }
 
-                    if (attackTimer >= grabbedCheckTime + holdDuration - lastPlayerHit.comboScaling * 2)
+                    if (attackTimer >= grabbedCheckTime + holdDuration - lastPlayerHit.comboCounter * 2)
                     {
-                        lastPlayerHit.velocity = new Vector2(6 * direction, -6);
+                        lastPlayerHit.velocity = new Vector2(6 * direction, -5);
                         SetAttack(GetAttackFromName("Grab Release"));
-                        lastPlayerHit.hitstunProperties.Add(HitstunProperties.Restand);
                     }
                 }
             }
@@ -1176,10 +1178,8 @@ namespace RCArena.Code.Objects
             state.Add("armorFrames", armorFrames);
             state.Add("hasDoubleJump", hasDoubleJump);
             state.Add("comboCounter", comboCounter);
-            state.Add("comboScaling", comboScaling);
             state.Add("hitstunProperties", new List<HitstunProperties>(hitstunProperties));
             state.Add("airCombo", airCombo);
-            state.Add("launched", launched);
             state.Add("wallBounced", wallBounced);
             state.Add("groundBounced", groundBounced);
             state.Add("buffs", new List<Buff>(buffs));
@@ -1227,10 +1227,8 @@ namespace RCArena.Code.Objects
             armorFrames = (int)state["armorFrames"];
             hasDoubleJump = (bool)state["hasDoubleJump"];
             comboCounter = (int)state["comboCounter"];
-            comboScaling = (float)state["comboScaling"];
             hitstunProperties = new List<HitstunProperties>((List<HitstunProperties>)state["hitstunProperties"]);
             airCombo = (bool)state["airCombo"];
-            launched = (bool)state["launched"];
             wallBounced = (bool)state["wallBounced"];
             groundBounced = (bool)state["groundBounced"];
             buffs = new List<Buff>((List<Buff>)state["buffs"]);

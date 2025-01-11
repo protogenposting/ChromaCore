@@ -19,6 +19,12 @@
             matrix = initialMatrix;
             inputLockout = 6;
         }
+        public MenuCursor(Controller controller, ButtonMatrix initialMatrix)
+        {
+            input = controller;
+            matrix = initialMatrix;
+            inputLockout = 6;
+        }
 
         public virtual void Update()
         {

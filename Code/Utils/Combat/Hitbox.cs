@@ -14,7 +14,7 @@ namespace RCArena.Code.Utils.Combat
         public int dmg;
         public int chipDamage;
         public Knockback kb;
-        public float comboScaling;
+        public float DIFactor;
         public int stun;
         public int pause;
         public int life;
@@ -42,12 +42,12 @@ namespace RCArena.Code.Utils.Combat
         public Action<Hitbox, Fighter> postHitEffect;
         public Action<Hitbox, Fighter> onBlockHitEffect;
 
-        public Hitbox(Fighter player, int damage, Knockback knockback, float comboScaling, Vector2 size, Vector2 positionOffset, int hitstun, int lifetime = 3, int hitpause = 4, HitTypes hitType = 0, int blockstun = 10, int blockPush = 4, string hitSfx = "Sounds/Hit", int hitboxGroup = -1, List<HitstunProperties> hitstunProperties = null, Action<Hitbox, Fighter> hitEffect = null, bool active = true) : base()
+        public Hitbox(Fighter player, int damage, Knockback knockback, float DIFactor, Vector2 size, Vector2 positionOffset, int hitstun, int lifetime = 3, int hitpause = 4, HitTypes hitType = 0, int blockstun = 10, int blockPush = 4, string hitSfx = "Sounds/Hit", int hitboxGroup = -1, List<HitstunProperties> hitstunProperties = null, Action<Hitbox, Fighter> hitEffect = null, bool active = true) : base()
         {
             owner = player;
             dmg = damage;
             kb = knockback;
-            this.comboScaling = comboScaling;
+            this.DIFactor = DIFactor;
             offset = positionOffset;
             stun = hitstun;
             life = lifetime;
@@ -138,7 +138,7 @@ namespace RCArena.Code.Utils.Combat
             if (target.armorFrames <= 0 || hitType.ToString().Contains("Grab"))
             {
                 bool wasGrounded = target.Grounded;
-                target.velocity = CalculateKnockBack(kb, !target.airCombo || hitstunProperties.Contains(HitstunProperties.Launcher) && !target.launched ? 1 : Math.Min(1, (13 - target.comboScaling * kb.scaling) / 10));
+                target.velocity = CalculateKnockBack(kb, target);
                 if (wasGrounded && !toAir)
                 {
                     target.velocity.Y = 0;
@@ -149,15 +149,6 @@ namespace RCArena.Code.Utils.Combat
                 }
                 target.hitstunProperties.Clear();
                 target.hitstunProperties.AddRange(hitstunProperties);
-                if (hitstunProperties.Contains(HitstunProperties.Launcher))
-                {
-                    if (target.launched)
-                    {
-                        target.velocity /= 2;
-                        target.hitstunProperties.Remove(HitstunProperties.Launcher);
-                    }
-                    else target.launched = true;
-                }
                 if (hitstunProperties.Contains(HitstunProperties.Knockdown)) target.knockdownDuration = knockdownDuration;
             }
 
@@ -174,19 +165,8 @@ namespace RCArena.Code.Utils.Combat
             //Apply hitstun and combo counting
             if (target.armorFrames <= 0 || hitType.ToString().Contains("Grab"))
             {
-                target.hitstunTimer = Math.Min(stun + 4 - (int)target.comboScaling, stun);
-                if (target.comboScaling < -1) target.hitstunTimer += 4;
-                if (target.hitstunTimer < 2) target.hitstunTimer = 2;
-                if (counterHitType == 1 || target.comboScaling <= -8 && target.comboCounter <= 1)
-                {
-                    target.hitstunTimer += 10;
-                    if (target.velocity.Y < 0)
-                    {
-                        target.hitstunProperties.Add(HitstunProperties.Launcher);
-                        target.velocity.Y -= 2;
-                        target.velocity.X /= 1.25f;
-                    }
-                }
+                target.hitstunTimer = Math.Min(stun + 4 - (int)target.comboCounter, stun);
+                if (target.hitstunTimer < 4) target.hitstunTimer = 4;
                 target.direction = Math.Sign(owner.position.X - target.position.X);
 
                 //Set Animation
@@ -225,7 +205,6 @@ namespace RCArena.Code.Utils.Combat
                 }
 
                 if (target.direction == 0) target.direction = 1;
-                target.comboScaling += comboScaling;
 
                 target.OnHurt(this, owner);
             }
@@ -237,10 +216,20 @@ namespace RCArena.Code.Utils.Combat
             if (postHitEffect != null) postHitEffect(this, target);
         }
 
-        public Vector2 CalculateKnockBack(Knockback kbValue, float scaling)
+        public Vector2 CalculateKnockBack(Knockback kbValue, Fighter target)
         {
-            Vector2 v = new Vector2(kbValue.baseKB * (this is Projectile ? direction : owner.direction) * (float)Math.Cos(MathHelper.ToRadians(kbValue.angle)), kbValue.baseKB * (float)Math.Sin(MathHelper.ToRadians(-kbValue.angle)));
-            if (v.Y < 0) v.Y = Math.Min(v.Y * scaling, -2);
+            int dir = target.inputDir * direction;
+            if (target.input.id == -2 && scene is InGameTraining tr)
+            {
+                if (tr.diSetting == InGameTraining.DISetting.In) dir = -1;
+                if (tr.diSetting == InGameTraining.DISetting.Out) dir = 1;
+            }
+            float ang = kbValue.angle;
+            if (dir == 1) ang.Approach(25 * Math.Sign(kb.angle), DIFactor);
+            if (dir == -1) ang.Approach(180 * Math.Sign(kb.angle), DIFactor);
+            Vector2 v = new Vector2(kbValue.baseKB * (this is Projectile ? direction : owner.direction) * (float)Math.Cos(MathHelper.ToRadians(ang)), kbValue.baseKB * (float)Math.Sin(MathHelper.ToRadians(-ang)));
+            if (v.Y < 0) v.Y = Math.Min(v.Y, -2);
+            v.Y *= 1 + (0.01f * DIFactor * dir);
             return v;
         }
 
@@ -251,7 +240,7 @@ namespace RCArena.Code.Utils.Combat
             state.Add("dmg", dmg);
             state.Add("chipDamage", chipDamage);
             state.Add("kb", kb);
-            state.Add("comboScaling", comboScaling);
+            state.Add("DIFactor", DIFactor);
             state.Add("stun", stun);
             state.Add("pause", pause);
             state.Add("life", life);
@@ -273,7 +262,7 @@ namespace RCArena.Code.Utils.Combat
             dmg = (int)state["dmg"];
             chipDamage = (int)state["chipDamage"];
             kb = (Knockback)state["kb"];
-            comboScaling = (float)state["comboScaling"];
+            DIFactor = (float)state["DIFactor"];
             stun = (int)state["stun"];
             pause = (int)state["pause"];
             life = (int)state["life"];
