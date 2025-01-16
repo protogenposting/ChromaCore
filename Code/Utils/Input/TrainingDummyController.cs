@@ -1,4 +1,5 @@
-﻿using RCArena.Code.Objects;
+﻿using Microsoft.Xna.Framework.Input;
+using RCArena.Code.Objects;
 using RCArena.Code.Scenes;
 
 namespace RCArena.Code.Utils.Input
@@ -11,7 +12,7 @@ namespace RCArena.Code.Utils.Input
         public TrainingDummyActions action = TrainingDummyActions.Stand;
         public TrainingDummyBlockTypes blockMode;
 
-        public TrainingDummyController(Fighter player) : base()
+        public TrainingDummyController(Fighter player) : base(-2)
         {
             this.player = player;
         }
@@ -40,6 +41,22 @@ namespace RCArena.Code.Utils.Input
             {
                 if (!player.CommitedState) keyPressed[Key_Up] = Inputbuffer;
                 keyDown[Key_Up] = true;
+            }
+            if (action == TrainingDummyActions.Block && target != null)
+            {
+                if (blockMode == TrainingDummyBlockTypes.Low) keyDown[Key_Down] = true;
+                if (target.state == Fighter.States.Attack && target.attack.hitboxes != null)
+                {
+                    HitboxSpawner hitbox = target.attack.hitboxes.FirstOrDefault(h => h.creationFrame >= target.attackTimer);
+                    int key = target.position.X > player.position.X ? Key_Left : Key_Right;
+                    if (hitbox != null && target.attackTimer >= hitbox.creationFrame - 1)
+                    {
+                        keyDown[key] = true;
+                        if (hitbox.hitType == HitTypes.Low && blockMode != TrainingDummyBlockTypes.High) keyDown[Key_Down] = true;
+                    }
+                }
+
+                if (player.state == Fighter.States.LowGuard) keyDown[Key_Down] = true;
             }
             UpdateMotionInputs(direction);
         }

@@ -21,12 +21,12 @@ namespace RCArena.Code.Scenes
             {
                 new TextBlock("Versus", "ExampleContent/UIFont", Color.White, "ExampleContent/UIButton")
                 {
-                    onClick = (c, m, b) => Game.Instance.ChangeScene(new CharacterSelect([0, -1]) { gamemode = Gamemodes.Versus }),
+                    onClick = (c, m, b) => Game.Instance.ChangeScene(new CharacterSelect() { gamemode = Gamemodes.Versus }),
                     size = new Vector2(240, 80)
                 },
                 new TextBlock("Training", "ExampleContent/UIFont", Color.White, "ExampleContent/UIButton")
                 {
-                    onClick = (c, m, b) => Game.Instance.ChangeScene(new CharacterSelect([0, -1]) { gamemode = Gamemodes.Training }),
+                    onClick = (c, m, b) => Game.Instance.ChangeScene(new CharacterSelect() { gamemode = Gamemodes.Training }),
                     size = new Vector2(240, 80)
                 },
                 new TextBlock("Online", "ExampleContent/UIFont", Color.White, "ExampleContent/UIButton")

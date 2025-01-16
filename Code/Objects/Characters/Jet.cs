@@ -242,7 +242,6 @@ namespace RCArena.Code.Objects.Players.Characters
                         size = new Vector2(72, 24),
                         offset = new Vector2(48, 56),
                         knockback = new Knockback(5, 0.5f, 70, false),
-                        comboScaling = 2,
                         hitstun = 18,
                         hitType = HitTypes.Low,
                         blockstun = 16,
@@ -257,7 +256,6 @@ namespace RCArena.Code.Objects.Players.Characters
                         size = new Vector2(48, 40),
                         offset = new Vector2(32, 48),
                         knockback = new Knockback(5, 0.5f, 70, false),
-                        comboScaling = 2,
                         hitstun = 18,
                         hitType = HitTypes.Low,
                         blockstun = 16,
@@ -370,7 +368,7 @@ namespace RCArena.Code.Objects.Players.Characters
                         lifetime = 3,
                         size = new Vector2(84, 40),
                         offset = new Vector2(86, 48),
-                        knockback = new Knockback(11, 0.5f, 40f, true),
+                        knockback = new Knockback(10, 0.5f, 50f, true),
                         hitstun = 18,
                         hitType = HitTypes.Low,
                         blockstun = 18,
@@ -403,6 +401,7 @@ namespace RCArena.Code.Objects.Players.Characters
                         size = new Vector2(96, 56),
                         offset = new Vector2(64, 4),
                         knockback = new Knockback(14, 0.5f, 75, true),
+                        DIFactor = 10,
                         hitstunProperties = new List<HitstunProperties>() { HitstunProperties.Launcher },
                         hitpause = 2,
                         blockstun = 16,
@@ -501,7 +500,6 @@ namespace RCArena.Code.Objects.Players.Characters
                         },
                         hitstun = 24,
                         blockPush = 0,
-                        comboScaling = 0.5f,
                         hitParticle = GenericParticles.HitFireNeutral()
                     },
                     new HitboxSpawner(this)
@@ -514,7 +512,6 @@ namespace RCArena.Code.Objects.Players.Characters
                         offset = new Vector2(48, 24),
                         knockback = new Knockback(16, 0.75f, 45, true),
                         hitstun = 24,
-                        comboScaling = 0.5f,
                         hitParticle = GenericParticles.HitFireDirectional(0)
                     }
                 },
@@ -552,7 +549,6 @@ namespace RCArena.Code.Objects.Players.Characters
                         hitstun = 24,
                         blockstun = 12,
                         blockPush = 0,
-                        comboScaling = 0.5f,
                         hitParticle = GenericParticles.HitLightNeutral()
                     },
                     new HitboxSpawner(this)
@@ -565,7 +561,6 @@ namespace RCArena.Code.Objects.Players.Characters
                         knockback = new Knockback(12, 0.75f, 30, true),
                         hitstun = 24,
                         blockstun = 12,
-                        comboScaling = 0.5f,
                         hitParticle = GenericParticles.HitLightDirectional(0)
                     }
                 },
@@ -623,7 +618,6 @@ namespace RCArena.Code.Objects.Players.Characters
                         size = new Vector2(64, 48),
                         offset = new Vector2(52, 16),
                         knockback = new Knockback(5.5f, 0, 70, false),
-                        comboScaling = 0.25f,
                         hitstun = 22,
                         hitType = HitTypes.Overhead,
                         blockstun = 20,
@@ -637,7 +631,6 @@ namespace RCArena.Code.Objects.Players.Characters
                         size = new Vector2(80, 48),
                         offset = new Vector2(64, 16),
                         knockback = new Knockback(12, 0.75f, 50, false),
-                        comboScaling =  0.75f,
                         hitstun = 24,
                         hitType = HitTypes.Overhead,
                         blockstun = 20,
@@ -664,6 +657,7 @@ namespace RCArena.Code.Objects.Players.Characters
                         size = new Vector2(64, 96),
                         offset = new Vector2(48, -32),
                         knockback = new Knockback(14, 1.5f, 70, true),
+                        DIFactor = 15,
                         blockstun = 16,
                         hitParticle = GenericParticles.HitLightDirectional(75),
                         hitboxGroup = 1
@@ -722,7 +716,8 @@ namespace RCArena.Code.Objects.Players.Characters
                         lifetime = 3,
                         size = new Vector2(80, 112),
                         offset = new Vector2(64, 0),
-                        knockback = new Knockback(28, 0, -80, true),
+                        knockback = new Knockback(20, 0, -80, true),
+                        DIFactor = 5,
                         hitstunProperties = new List<HitstunProperties>() { HitstunProperties.GroundBounce },
                         hitstun = 24,
                         hitpause = 6,
@@ -784,7 +779,7 @@ namespace RCArena.Code.Objects.Players.Characters
                 {
                     new AnimationParticle(new Animation("Characters/Jet/att_qcfLight_Particle", 6, 5, new Vector2(64), false), 10, 30)
                 }
-            }, new AttackInput(Controller.Key_Light, InputMotions.ChargeBack))
+            }, new AttackInput(Controller.Key_Light, InputMotions.QuarterForward))
             {
                 name = "Jet Flurry",
                 groundedness = 1,
@@ -806,7 +801,6 @@ namespace RCArena.Code.Objects.Players.Characters
                         postHitEffect = (h, p) => { ApplyBurn(p, 1f); },
                         hitstun = 24,
                         hitpause = 2,
-                        comboScaling = 0,
                         hitParticle = null
                     },
                     new HitboxSpawner(this)
@@ -827,7 +821,8 @@ namespace RCArena.Code.Objects.Players.Characters
                         lifetime = 3,
                         size = new Vector2(56, 96),
                         offset = new Vector2(48, -16),
-                        knockback = new Knockback(13f, 4f, 73f, true),
+                        knockback = new Knockback(13f, 4f, 75f, true),
+                        DIFactor = 10,
                         blockstun = 13,
                         postHitEffect = (h, p) => { ApplyBurn(p, 1.5f); ConsumeHeatCharge(); },
                         hitParticle = GenericParticles.HitFireDirectional(45)
@@ -844,7 +839,7 @@ namespace RCArena.Code.Objects.Players.Characters
                 }
             });
 
-            attacks.Add(new Attack(new Animation("Characters/Jet/att_qcfLight_NoFire", 9, 3, new Vector2(64), false), new AttackInput(Controller.Key_Light, InputMotions.ChargeBack))
+            attacks.Add(new Attack(new Animation("Characters/Jet/att_qcfLight_NoFire", 9, 3, new Vector2(64), false), new AttackInput(Controller.Key_Light, InputMotions.QuarterForward))
             {
                 name = "Jet Flurry No Fire",
                 duration = 30,
@@ -866,7 +861,6 @@ namespace RCArena.Code.Objects.Players.Characters
                         blockstun = 5,
                         hitstun = 14,
                         hitpause = 2,
-                        comboScaling = 0.25f,
                         hitParticle = null
                     },
                     new HitboxSpawner(this)
@@ -928,8 +922,7 @@ namespace RCArena.Code.Objects.Players.Characters
                         hitpause = 0,
                         blockstun = 20,
                         blockPush = -4,
-                        hitParticle = null,
-                        comboScaling = 0
+                        hitParticle = null
                     }
                 },
                 pushers = new Pusher[]
@@ -1009,6 +1002,7 @@ namespace RCArena.Code.Objects.Players.Characters
                         size = new Vector2(128, 96),
                         offset = new Vector2(0, 32),
                         knockback = new Knockback(24, 0, -70, false),
+                        DIFactor = 10,
                         hitstunProperties = new List<HitstunProperties>() { HitstunProperties.GroundBounce },
                         hitstun = 22,
                         hitpause = 0,
@@ -1040,6 +1034,7 @@ namespace RCArena.Code.Objects.Players.Characters
                         size = new Vector2(128, 96),
                         offset = new Vector2(0, 32),
                         knockback = new Knockback(24, 0, -80, false),
+                        DIFactor = 10,
                         hitstunProperties = new List<HitstunProperties>() { HitstunProperties.GroundBounce },
                         hitstun = 22,
                         hitpause = 0,
@@ -1079,8 +1074,7 @@ namespace RCArena.Code.Objects.Players.Characters
                         hitpause = 8,
                         blockstun = 18,
                         blockPush = -4,
-                        hitParticle = GenericParticles.HitLightDirectional(-45),
-                        comboScaling = 1
+                        hitParticle = GenericParticles.HitLightDirectional(-45)
                     }
                 },
                 pushers = new Pusher[]
@@ -1361,7 +1355,6 @@ namespace RCArena.Code.Objects.Players.Characters
                         offset = new Vector2(48, -8),
                         knockback = new Knockback(12, 0, 80, true),
                         hitpause = 1,
-                        comboScaling = 0,
                         blockstun = 20,
                         hitParticle = GenericParticles.HitFireNeutral(),
                         modifiers = p =>
@@ -1386,11 +1379,6 @@ namespace RCArena.Code.Objects.Players.Characters
                         },
                         postHitEffect = (h, p) =>
                         {
-                            if (uppercutCharge == 32 && p.comboScaling <= -1)
-                            {
-                                p.velocity = p.velocity.RotatedBy(-5 * direction);
-                                p.hitstunProperties.Add(HitstunProperties.Launcher);
-                            }
                             ApplyBurn(p, 2f);
                             ConsumeHeatCharge();
                         }
@@ -1593,7 +1581,6 @@ namespace RCArena.Code.Objects.Players.Characters
                         knockback = new Knockback(0, 0f, 0, false),
                         hitType = HitTypes.Grab,
                         hitpause = 0,
-                        comboScaling = 2,
                         hitSound = "",
                         hitParticle = null
                     }
@@ -1635,7 +1622,6 @@ namespace RCArena.Code.Objects.Players.Characters
                         size = new Vector2(32, 48),
                         offset = new Vector2(52, 12),
                         knockback = new Knockback(11, 0f, 85, true),
-                        comboScaling = 0.5f,
                         hitParticle = GenericParticles.HitLightNeutral()
                     },
                     new HitboxSpawner(this)
@@ -1645,8 +1631,8 @@ namespace RCArena.Code.Objects.Players.Characters
                         lifetime = 1,
                         size = new Vector2(80, 112),
                         offset = new Vector2(48, -16),
-                        knockback = new Knockback(16, 0f, 55, true),
-                        comboScaling = 0.5f,
+                        knockback = new Knockback(16, 0f, 60, true),
+                        DIFactor = 15,
                         hitstunProperties = new List<HitstunProperties>() { HitstunProperties.Launcher },
                         hitpause = 6,
                         hitParticle = GenericParticles.HitLightDirectional(45)
@@ -1691,7 +1677,8 @@ namespace RCArena.Code.Objects.Players.Characters
                         lifetime = 1,
                         size = new Vector2(48, 48),
                         offset = new Vector2(32, 0),
-                        knockback = new Knockback(24, 0f, 15, true),
+                        knockback = new Knockback(16, 0f, 45, true),
+                        DIFactor = 10,
                         hitpause = 4,
                         hitSound = "",
                         hitParticle = null

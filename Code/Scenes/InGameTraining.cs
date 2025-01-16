@@ -19,7 +19,7 @@ namespace RCArena.Code.Scenes
 
         public bool frameByFrameMode = false;
         public bool displayHitboxes = false;
-        public CounterHitSetting forceCounterHit = CounterHitSetting.Off;
+        public DISetting diSetting = DISetting.None;
         public int comboDamage = 0;
 
         private int damageDisplay;
@@ -90,7 +90,7 @@ namespace RCArena.Code.Scenes
                         [
                             players[0].currentPalette, players[1].currentPalette
                         ], roomType)
-                        { displayHitboxes = displayHitboxes, forceCounterHit = forceCounterHit, characterSettings = characterSettings, music = music };
+                        { displayHitboxes = displayHitboxes, diSetting = diSetting, characterSettings = characterSettings, music = music };
 
                         Game.Instance.ChangeScene(scene, (s) =>
                         {
@@ -140,7 +140,6 @@ namespace RCArena.Code.Scenes
                 spritebatch.DrawString(Fonts.exampleFont, "Damage: " + damageDisplay, new Vector2(100, 200), Color.White, 0, Vector2.Zero, 2, SpriteEffects.None, 0.9f);
                 spritebatch.DrawString(Fonts.exampleFont, "Frame Advantage: " + holdFrameAdvantage, new Vector2(100, 280), Color.White, 0, Vector2.Zero, 2, SpriteEffects.None, 0.9f);
                 spritebatch.DrawString(Fonts.exampleFont, "Attack Startup: " + startupDisplay, new Vector2(100, 340), Color.White, 0, Vector2.Zero, 2, SpriteEffects.None, 0.9f);
-                spritebatch.DrawString(Fonts.exampleFont, "Combo Scaling: " + players[1].comboScaling, new Vector2(100, 400), Color.White, 0, Vector2.Zero, 2, SpriteEffects.None, 0.9f);
                 if (frameByFrameMode) spritebatch.DrawString(Fonts.exampleFont, "Frame-by-frame mode enabled\nPress Tab to advance the frame\nPress " + (players[0].input.id == -1 ? "Escape " : "Select ") + "to exit", new Vector2(40, 960), Color.White, 0, Vector2.Zero, 2, SpriteEffects.None, 0.9f);
                 spritebatch.End();
             }
@@ -173,20 +172,20 @@ namespace RCArena.Code.Scenes
                 },
                 layer = 0.7f
             });
-            buttons.Add(new TextBlock("Counter Hit: " + forceCounterHit.ToString(), "ExampleContent/UIFont", Color.White, "UI/Menu/MenuButton")
-            {
-                onClick = (c, m, b) =>
-                {
-                    forceCounterHit++;
-                    if (forceCounterHit == CounterHitSetting.Length) forceCounterHit = CounterHitSetting.Off;
-
-                    ((TextBlock)b).text = "Counter Hit: " + forceCounterHit.ToString();
-                },
-                layer = 0.7f
-            });
 
             if (dummyController != null)
             {
+                buttons.Add(new TextBlock("DI: " + diSetting.ToString(), "ExampleContent/UIFont", Color.White, "UI/Menu/MenuButton")
+                {
+                    onClick = (c, m, b) =>
+                    {
+                        diSetting++;
+                        if (diSetting == DISetting.Length) diSetting = DISetting.None;
+
+                        ((TextBlock)b).text = "DI: " + diSetting.ToString();
+                    },
+                    layer = 0.7f
+                });
                 buttons.Add(new TextBlock("Dummy: " + dummyController.action.ToString(), "ExampleContent/UIFont", Color.White, "UI/Menu/MenuButton")
                 {
                     onClick = (c, m, b) =>
@@ -267,10 +266,11 @@ namespace RCArena.Code.Scenes
             Game.Instance.ChangeScene(new CharacterSelect([players[0].input.id, players[1].input.id]) { gamemode = Gamemodes.Training });
         }
 
-        public enum CounterHitSetting
+        public enum DISetting
         {
-            Off,
-            On,
+            None,
+            In,
+            Out,
             Length
         }
     }

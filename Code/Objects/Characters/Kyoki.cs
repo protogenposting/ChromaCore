@@ -31,7 +31,7 @@ namespace RCArena.Code.Objects.Players.Characters
             holdDash = true;
             dashCooldown = 8;
 
-            drawScale = 0.125f;
+            drawScale = 1 / 16f;
         }
 
         public override void BaseStats()
@@ -42,15 +42,15 @@ namespace RCArena.Code.Objects.Players.Characters
 
             healthMax = 350;
 
-            collider = new Collider(this, 48, 80, new Vector2(-24, -12));
-            idleHurtbox = new Collider(this, 80, 112, new Vector2(-40, -44));
+            collider = new Collider(this, 48, 80, new Vector2(-24, 0));
+            idleHurtbox = new Collider(this, 64, 112, new Vector2(-32, -44));
             crouchHurtbox = new Collider(this, 72, 88, new Vector2(-36, -20));
 
             idleAnim = new Animation("Characters/Kyoki/Idle", 1, 0);
-            crouchAnim = new CompoundAnimation("Characters/Jet/Crouch", 1, 4, 12, 3);
-            unCrouchAnim = new Animation("Characters/Jet/UnCrouch", 2, 4, false);
-            walkAnim = new CompoundAnimation("Characters/Jet/Walk", 1, 8, 5);
-            walkBackAnim = new CompoundAnimation("Characters/Jet/WalkBackward", 1, 8, 8);
+            crouchAnim = new CompoundAnimation("Characters/Kyoki/crouch", 1, 0, 0);
+            unCrouchAnim = new Animation("Characters/Kyoki/unCrouch", 1, 0, false);
+            walkAnim = new Animation("Characters/Kyoki/walk", 4, 10);
+            walkBackAnim = new Animation("Characters/Kyoki/walkBack", 4, 12);
             runAnim = new CompoundAnimation("Characters/Jet/Run", 2, 6, 6, 4);
             backdashAnim = new Animation("Characters/Jet/Backdash", 4, 4, false);
             jumpSquatAnim = new Animation("Characters/Jet/JumpSquat", 1, 0);
