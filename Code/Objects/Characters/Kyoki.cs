@@ -51,8 +51,8 @@ namespace RCArena.Code.Objects.Players.Characters
             unCrouchAnim = new Animation("Characters/Kyoki/unCrouch", 1, 0, false);
             walkAnim = new Animation("Characters/Kyoki/walk", 4, 10);
             walkBackAnim = new Animation("Characters/Kyoki/walkBack", 4, 12);
-            runAnim = new CompoundAnimation("Characters/Jet/Run", 2, 6, 6, 4);
-            backdashAnim = new Animation("Characters/Jet/Backdash", 4, 4, false);
+            runAnim = new CompoundAnimation("Characters/Kyoki/run", 2, 6, 6, 4);
+            backdashAnim = new Animation("Characters/Kyoki/backdash", 4, 4, false);
             jumpSquatAnim = new Animation("Characters/Jet/JumpSquat", 1, 0);
             airAnim = new Animation("Characters/Jet/Jump", 4, 0);
             airHurtAnim = new Animation("Characters/Jet/HurtAir", 5, 4, false);
