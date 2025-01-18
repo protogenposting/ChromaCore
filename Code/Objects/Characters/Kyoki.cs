@@ -53,7 +53,7 @@ namespace RCArena.Code.Objects.Players.Characters
             walkBackAnim = new Animation("Characters/Kyoki/walkBack", 4, 12);
             runAnim = new CompoundAnimation("Characters/Kyoki/run", 2, 6, 6, 4);
             backdashAnim = new Animation("Characters/Kyoki/backdash", 4, 4, false);
-            jumpSquatAnim = new Animation("Characters/Jet/JumpSquat", 1, 0);
+            jumpSquatAnim = new Animation("Characters/Kyoki/jumpSquat", 1, 0);
             airAnim = new Animation("Characters/Jet/Jump", 4, 0);
             airHurtAnim = new Animation("Characters/Jet/HurtAir", 5, 4, false);
             groundHurtAnim = new Animation("Characters/Jet/HurtStand", 2, 6, false);
